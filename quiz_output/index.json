@@ -3,17 +3,17 @@
     "highschool/novel": {
       "level": "高校入試レベル",
       "genre": "小説",
-      "total_count": 5,
+      "total_count": 50,
       "packs": [
         {
           "pack_name": "pack_001.json",
-          "count": 5
+          "count": 50
         }
       ],
       "choice_packs": [
         {
           "pack_name": "pack_001.json",
-          "count": 5
+          "count": 50
         }
       ],
       "essay_packs": []
@@ -21,17 +21,17 @@
     "highschool/essay": {
       "level": "高校入試レベル",
       "genre": "評論",
-      "total_count": 5,
+      "total_count": 50,
       "packs": [
         {
           "pack_name": "pack_001.json",
-          "count": 5
+          "count": 50
         }
       ],
       "choice_packs": [
         {
           "pack_name": "pack_001.json",
-          "count": 5
+          "count": 50
         }
       ],
       "essay_packs": []
@@ -39,17 +39,17 @@
     "common_test/novel": {
       "level": "共通テストレベル",
       "genre": "小説",
-      "total_count": 5,
+      "total_count": 50,
       "packs": [
         {
           "pack_name": "pack_001.json",
-          "count": 5
+          "count": 50
         }
       ],
       "choice_packs": [
         {
           "pack_name": "pack_001.json",
-          "count": 5
+          "count": 50
         }
       ],
       "essay_packs": []
@@ -57,17 +57,17 @@
     "common_test/essay": {
       "level": "共通テストレベル",
       "genre": "評論",
-      "total_count": 5,
+      "total_count": 50,
       "packs": [
         {
           "pack_name": "pack_001.json",
-          "count": 5
+          "count": 50
         }
       ],
       "choice_packs": [
         {
           "pack_name": "pack_001.json",
-          "count": 5
+          "count": 50
         }
       ],
       "essay_packs": []
@@ -75,17 +75,17 @@
     "difficult_univ/novel": {
       "level": "難関大学レベル",
       "genre": "小説",
-      "total_count": 5,
+      "total_count": 50,
       "packs": [
         {
           "pack_name": "pack_001.json",
-          "count": 5
+          "count": 50
         }
       ],
       "choice_packs": [
         {
           "pack_name": "pack_001.json",
-          "count": 5
+          "count": 50
         }
       ],
       "essay_packs": []
@@ -93,17 +93,17 @@
     "difficult_univ/essay": {
       "level": "難関大学レベル",
       "genre": "評論",
-      "total_count": 5,
+      "total_count": 50,
       "packs": [
         {
           "pack_name": "pack_001.json",
-          "count": 5
+          "count": 50
         }
       ],
       "choice_packs": [
         {
           "pack_name": "pack_001.json",
-          "count": 5
+          "count": 50
         }
       ],
       "essay_packs": []
