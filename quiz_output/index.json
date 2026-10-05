@@ -3,7 +3,7 @@
     "highschool/novel": {
       "level": "高校入試レベル",
       "genre": "小説",
-      "total_count": 140,
+      "total_count": 200,
       "packs": [
         {
           "pack_name": "pack_001.json",
@@ -19,14 +19,14 @@
       "essay_packs": [
         {
           "pack_name": "essay_pack_001.json",
-          "count": 40
+          "count": 100
         }
       ]
     },
     "highschool/essay": {
       "level": "高校入試レベル",
       "genre": "評論",
-      "total_count": 140,
+      "total_count": 200,
       "packs": [
         {
           "pack_name": "pack_001.json",
@@ -42,14 +42,14 @@
       "essay_packs": [
         {
           "pack_name": "essay_pack_001.json",
-          "count": 40
+          "count": 100
         }
       ]
     },
     "common_test/novel": {
       "level": "共通テストレベル",
       "genre": "小説",
-      "total_count": 140,
+      "total_count": 200,
       "packs": [
         {
           "pack_name": "pack_001.json",
@@ -65,14 +65,14 @@
       "essay_packs": [
         {
           "pack_name": "essay_pack_001.json",
-          "count": 40
+          "count": 100
         }
       ]
     },
     "common_test/essay": {
       "level": "共通テストレベル",
       "genre": "評論",
-      "total_count": 140,
+      "total_count": 200,
       "packs": [
         {
           "pack_name": "pack_001.json",
@@ -88,14 +88,14 @@
       "essay_packs": [
         {
           "pack_name": "essay_pack_001.json",
-          "count": 40
+          "count": 100
         }
       ]
     },
     "difficult_univ/novel": {
       "level": "難関大学レベル",
       "genre": "小説",
-      "total_count": 140,
+      "total_count": 200,
       "packs": [
         {
           "pack_name": "pack_001.json",
@@ -111,14 +111,14 @@
       "essay_packs": [
         {
           "pack_name": "essay_pack_001.json",
-          "count": 40
+          "count": 100
         }
       ]
     },
     "difficult_univ/essay": {
       "level": "難関大学レベル",
       "genre": "評論",
-      "total_count": 140,
+      "total_count": 181,
       "packs": [
         {
           "pack_name": "pack_001.json",
@@ -134,7 +134,7 @@
       "essay_packs": [
         {
           "pack_name": "essay_pack_001.json",
-          "count": 40
+          "count": 81
         }
       ]
     }
