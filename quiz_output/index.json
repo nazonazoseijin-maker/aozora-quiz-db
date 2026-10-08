@@ -3,7 +3,7 @@
     "highschool/novel": {
       "level": "高校入試レベル",
       "genre": "小説",
-      "total_count": 450,
+      "total_count": 554,
       "packs": [
         {
           "pack_name": "pack_001.json",
@@ -19,7 +19,11 @@
         },
         {
           "pack_name": "pack_004.json",
-          "count": 40
+          "count": 100
+        },
+        {
+          "pack_name": "pack_005.json",
+          "count": 44
         }
       ],
       "choice_packs": [
@@ -37,7 +41,11 @@
         },
         {
           "pack_name": "pack_004.json",
-          "count": 40
+          "count": 100
+        },
+        {
+          "pack_name": "pack_005.json",
+          "count": 44
         }
       ],
       "essay_packs": [
