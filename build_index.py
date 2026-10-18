@@ -6,7 +6,12 @@
 """
 
 import os
+import sys
 import json
+import functools
+
+# ログ出力を即時反映（アンバッファ）させる設定
+print = functools.partial(print, flush=True)
 
 LEVELS = ["高校入試レベル", "共通テストレベル", "難関大学レベル"]
 GENRES = ["小説", "評論"]
@@ -88,8 +93,9 @@ def pack_quizzes(output_dir: str = "./quiz_output", pack_size: int = 100):
                 "choice_packs": choice_packs_info,
                 "essay_packs": essay_packs_info
             }
-            print(f" [OK] {level} ✕ {genre}: 選択問 {len(choice_quizzes)}問 / 記述問 {len(essay_quizzes)}問")
+            print(f" [OK] {level} x {genre}: 選択問 {len(choice_quizzes)}問 / 記述問 {len(essay_quizzes)}問")
 
+    os.makedirs(output_dir, exist_ok=True)
     index_path = os.path.join(output_dir, "index.json")
     with open(index_path, "w", encoding="utf-8") as f:
         json.dump(index_manifest, f, ensure_ascii=False, indent=2)

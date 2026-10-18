@@ -17,6 +17,7 @@ python generate_quizzes.py --api_key YOUR_GEMINI_API_KEY --count_per_category 50
 """
 
 import os
+import sys
 import re
 import csv
 import json
@@ -27,7 +28,23 @@ import io
 import zipfile
 import argparse
 import math
+import glob
+import functools
 from typing import List, Dict, Any, Optional
+
+try:
+    from refine_quizzes import refine_quiz_item
+except ImportError:
+    refine_quiz_item = None
+
+# ログ出力を即時反映（アンバッファ）させる設定
+print = functools.partial(print, flush=True)
+
+if hasattr(sys.stdout, 'reconfigure'):
+    try:
+        sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+    except Exception:
+        pass
 import urllib.request
 
 try:
@@ -40,6 +57,14 @@ except ImportError:
 # 定数定義
 LEVELS = ["高校入試レベル", "共通テストレベル", "難関大学レベル"]
 GENRES = ["小説", "評論"]
+
+def make_progress_bar(current: int, total: int, length: int = 15) -> str:
+    if total <= 0:
+        return ""
+    percent = min(100.0, (current / total) * 100.0)
+    filled_len = int(length * current // total) if total > 0 else 0
+    bar = "█" * filled_len + "░" * (length - filled_len)
+    return f"[{bar}] {current}/{total}問 ({percent:.1f}%)"
 
 LEVEL_DIR_MAP = {
     "高校入試レベル": "highschool",
@@ -54,40 +79,16 @@ GENRE_DIR_MAP = {
 
 LEVEL_GUIDELINES = {
     "高校入試レベル": {
-        "小説": """
-- 文章選択: 具体的で分かりやすい場面を1000文字抽出。
-- 設問: 叙述や描写などに即して、語句や文の意味、登場人物の様子、心情などを正しく理解していれば解ける問い。
-- 選択肢: 明らかに誤りと分かる選択肢を1つ含め、正解を導きやすくする。
-""",
-        "評論": """
-- 文章選択: 具体的で分かりやすい場面を1000文字抽出。
-- 設問: 叙述や描写などに即して、語句や文の意味、文章の構成及び要旨などを正しく理解していれば解ける問い。
-- 選択肢: 明らかに誤りと分かる選択肢を1つ含め、正解を導きやすくする。
-"""
+        "小説": "【場面】具体的で分かりやすい場面。【設問】登場人物の心情・言動・語句の意味を問う。【選択肢】明確な誤りを含め解きやすくする。",
+        "評論": "【文章】論理の展開が分かりやすい箇所。【設問】文章の構成・要旨・語句の意味を問う。【選択肢】標準的な構成。"
     },
     "共通テストレベル": {
-        "小説": """
-- 文章選択: 心情の屈折や情景描写の工夫が見られる一節を1000文字程度抽出。
-- 設問: 登場人物の心情の推移やその背景、比喩や視点といった表現の特色が読者に与える効果、および本文の構造を多角的に分析する問い。
-- 選択肢: 本文の言い換えが巧妙で、文脈上の細かな根拠を正確に照合させる、標準的かつ思考力を要する構成。
-""",
-        "評論": """
-- 文章選択: 論理の展開が明確で、筆者の独自の主張や概念が提示されている箇所を1000文字程度抽出。
-- 設問: 文章全体の構成や展開、筆者の主張の根拠、および語句の文脈的意味を的確に把握し、多角的な視点から考察させる問い。
-- 選択肢: 部分的な一致に惑わされず、文章全体の要旨と照らし合わせて論理的な消去法を要求する、標準的かつ精緻な構成。
-"""
+        "小説": "【場面】心情の屈折や情景描写の工夫が見られる一節。【設問】心情推移、表現の効果、本文構造の多角分析。【選択肢】巧妙な言い換えを含み文脈照合を要求する。",
+        "評論": "【文章】筆者の独自の主張や概念が提示された箇所。【設問】文章の構成、主張の根拠、語句の文脈的意味。【選択肢】消去法を要する精緻な構成。"
     },
     "難関大学レベル": {
-        "小説": """
-- 文章選択: 文体や心理描写が重層的で、人間の内面の葛藤や実存的なテーマを扱う高度な一節を1000文字程度厳選。
-- 設問: 叙述の微細なニュアンスから読み取れる心理の深層、言葉に込められた象徴的意味、あるいは作品の時代背景に踏み込んだ、極めて深い洞察を要する問い。
-- 選択肢: 4択すべてが正解に見えるほど抽象度が高く、本文の表現とのわずかな「ずれ」を見抜かなければ解けない、高度に罠が仕掛けられた構成。
-""",
-        "評論": """
-- 文章選択: 哲学、思想、芸術、社会批評など、高度な抽象概念や二項対立、反語的なレトリックを駆使した難解な文章を1000文字程度厳選。
-- 設問: 筆者の思索のプロセスを追体験し、提示された概念の特異性や、一見矛盾する議論の帰結を読み解く、高度な論理的思考力と深い教養を試す問い。
-- 選択肢: 本文の言葉を単に拾うのではなく、その本質を捉え直した高度な抽象化がなされており、微細な論理の綻びを聞き分ける必要がある構成。
-"""
+        "小説": "【場面】葛藤や実存的テーマを扱う高度な一節。【設問】心理の深層、象徴的意味、微細なニュアンスの解釈。【選択肢】抽象度が高くわずかなズレを見抜かせる構成。",
+        "評論": "【文章】高度な抽象概念や二項対立を駆使した難解な文章。【設問】思索のプロセス追体験、概念の特異性の解釈。【選択肢】高度な抽象化がなされた精緻な構成。"
     }
 }
 
@@ -96,29 +97,30 @@ THEMES_MULTIPLE_CHOICE = {
     "REASON_CHOICE": {
         "title": "傍線部の理由説明",
         "target": "なぜその状況・発言に至ったのかの論理的因果関係を問う",
-        "rule": "傍線部の「なぜか」「その根拠」を問う4択問題を作成せよ。・正解：本文の根拠に基づいた因果関係・誤答：因果の逆転、根拠の欠落、本文と無関係な理由"
+        "rule": "傍線部の「なぜか」「その根拠」を問う問題を作成せよ。・正解：本文の根拠に基づいた因果関係・誤答：因果の逆転、根拠の欠落、無関係な理由"
     },
     "PARAPHRASE_CHOICE": {
         "title": "傍線部の言い換え・内容説明",
         "target": "「どういうことか」という換言・具体化能力を問う",
-        "rule": "傍線部（比喩・抽象表現・指示語など）を分かりやすく説明した4択問題を作成せよ。・正解：本文文脈に合致する抽象↔具体の換言・誤答：一部のみ正しい（不十分）、誇張（言い過ぎ）、ニュアンスのズレ"
+        "rule": "傍線部（比喩・抽象表現・指示語など）を分かりやすく説明した問題を作成せよ。・正解：本文文脈に合致する換言・誤答：不十分な正解、誇張、ニュアンスのズレ"
     },
     "EMOTION_CHOICE": {
         "title": "登場人物の心情・心理変化",
         "target": "場面の情景や言動から心理変化を客観的に読み取る力を問う",
-        "rule": "場面（情景・言動・対話）における登場人物の心情やその変化を問う4択問題を作成せよ。・正解：文脈・描写から客観的に導ける感情・誤答：現代的な先入観による解釈、本文描写と反する感情"
+        "rule": "場面における登場人物の心情やその変化を問う問題を作成せよ。・正解：文脈から導ける感情・誤答：先入観による解釈、本文と反する感情"
     },
     "SUMMARY_CHOICE": {
         "title": "段落・全体の要旨把握",
         "target": "文章全体の構造とメインテーマを把握する全体俯瞰力を問う",
-        "rule": "文章全体の主張や特定段落のまとめとして最も適切なものを選ぶ4択問題を作成せよ。・正解：筆者の主張・メインテーマの要約・誤答：細部の話（部分的正解）、本文の主張と対立する内容"
+        "rule": "文章全体の主張や特定段落のまとめを選択する問題を作成せよ。・正解：筆者の主張・要約・誤答：細部の話（部分的正解）、主張と対立する内容"
     },
     "TRICKY_CHOICE": {
         "title": "高難易度（ひっかけ・消去法訓練）",
         "target": "言い過ぎ・すり替えなどの誤答を見抜く精緻な消去法能力を問う",
-        "rule": "誤答選択肢の誤り（「言い過ぎ」「すり替え」「本文に記述なし」など）が見抜きにくい高難易度4択問題を作成せよ。"
+        "rule": "誤答選択肢の誤り（「言い過ぎ」「すり替え」「本文に記述なし」など）が見抜きにくい高難易度問題を作成せよ。"
     }
 }
+
 
 THEMES_ESSAY = {
     "SHORT_EXPLANATION": {
@@ -171,18 +173,18 @@ GENRE_ALIAS_MAP = {
 
 
 class BookInfo:
-    def __init__(self, book_id: str, title: str, author: str, zip_url: str, card_url: str, ndc: str):
+    def __init__(self, book_id: str, title: str, author: str, zip_url: str, card_url: str, category: str):
         self.book_id = book_id
         self.title = title
         self.author = author
         self.zip_url = zip_url
         self.card_url = card_url
-        self.ndc = ndc
+        self.category = category  # novel, novel-easy, essay, essay-easy
 
 
 def load_books_from_csv(csv_path: str) -> Dict[str, List[BookInfo]]:
-    """CSVからNDC分類（913:小説, 914:評論）に応じた作品リストを取得"""
-    books = {"小説": [], "評論": []}
+    """新しいCSVから問題分類（novel, novel-easy, essay, essay-easy）に応じた作品リストを取得"""
+    books = {"novel": [], "novel-easy": [], "essay": [], "essay-easy": []}
     if not os.path.exists(csv_path):
         print(f"エラー: CSVファイルが見つかりません: {csv_path}")
         return books
@@ -191,20 +193,17 @@ def load_books_from_csv(csv_path: str) -> Dict[str, List[BookInfo]]:
         reader = csv.reader(f)
         header = next(reader, None)
         for row in reader:
-            if len(row) > 45:
-                ndc = row[8].strip()
-                zip_url = row[45].strip()
-                title = row[1].strip()
-                author = f"{row[15].strip()}{row[16].strip()}"
+            if len(row) >= 8:
                 book_id = row[0].strip()
-                card_url = row[13].strip() if len(row) > 13 else ""
+                title = row[1].strip()
+                category = row[2].strip().lower()  # novel, novel-easy, essay, essay-easy
+                card_url = row[4].strip()
+                author = row[6].strip()
+                zip_url = row[7].strip()
 
-                if zip_url.startswith("http"):
-                    book = BookInfo(book_id, title, author, zip_url, card_url, ndc)
-                    if "913" in ndc:
-                        books["小説"].append(book)
-                    elif "914" in ndc:
-                        books["評論"].append(book)
+                if zip_url.startswith("http") and category in books:
+                    book = BookInfo(book_id, title, author, zip_url, card_url, category)
+                    books[category].append(book)
 
     # 作品ID（book_id）の若い順（昇順）にソート
     def parse_book_id(b: BookInfo) -> int:
@@ -213,9 +212,37 @@ def load_books_from_csv(csv_path: str) -> Dict[str, List[BookInfo]]:
         except ValueError:
             return 999999
 
-    books["小説"].sort(key=parse_book_id)
-    books["評論"].sort(key=parse_book_id)
+    for cat in books:
+        books[cat].sort(key=parse_book_id)
+
     return books
+
+
+def get_candidate_books(books_by_cat: Dict[str, List[BookInfo]], level: str, genre: str) -> List[BookInfo]:
+    """レベルとジャンル（小説/評論）に応じた対象作品リストを取得"""
+    if genre == "小説":
+        if level == "高校入試レベル":
+            # 高校入試レベルの小説: novel + novel-easy
+            raw_candidates = books_by_cat.get("novel", []) + books_by_cat.get("novel-easy", [])
+        else:
+            # 共通テスト / 難関大学レベルの小説: novel のみ
+            raw_candidates = books_by_cat.get("novel", [])
+    else:  # 評論
+        if level == "高校入試レベル":
+            # 高校入試レベルの評論: essay + essay-easy
+            raw_candidates = books_by_cat.get("essay", []) + books_by_cat.get("essay-easy", [])
+        else:
+            # 共通テスト / 難関大学レベルの評論: essay のみ
+            raw_candidates = books_by_cat.get("essay", [])
+
+    # 作品ID（book_id）の昇順に並び替え
+    def parse_book_id(b: BookInfo) -> int:
+        try:
+            return int(b.book_id)
+        except ValueError:
+            return 999999
+
+    return sorted(raw_candidates, key=parse_book_id)
 
 
 def clean_aozora_text(text: str) -> str:
@@ -227,7 +254,7 @@ def clean_aozora_text(text: str) -> str:
 
 
 def normalize_modern_japanese(text: str) -> str:
-    """旧仮名遣いや不自然な大文字の「つ」などを現代日本語表記に後補正"""
+    """旧仮名遣いや不自然な大文字の「つ」、問題文の「六つから」等を現代日本語表記に後補正"""
     replacements = [
         ("ゐ", "い"), ("ヰ", "イ"),
         ("ゑ", "え"), ("ヱ", "エ"),
@@ -237,12 +264,58 @@ def normalize_modern_japanese(text: str) -> str:
         ("つさ", "っさ"), ("つし", "っし"), ("つす", "っす"), ("つせ", "っせ"), ("つそ", "っそ"),
         ("つぱ", "っぱ"), ("つぴ", "っぴ"), ("つぷ", "っぷ"), ("つぺ", "っぺ"), ("つぽ", "っぽ"),
         ("つち", "っち"), ("つちゃ", "っちゃ"), ("つちゅ", "っちゅ"), ("つちょ", "っちょ"),
-        ("座つ", "座っ"), ("立つ", "立っ"), ("買つ", "買っ"), ("言ふ", "いう"), ("思ふ", "おもう")
+        ("座つ", "座っ"), ("立つ", "立っ"), ("買つ", "買っ"), ("言ふ", "いう"), ("思ふ", "おもう"),
+        ("次の六つから", "次のうちから"),
+        ("次の6つから", "次のうちから"),
+        ("次の五つから", "次のうちから"),
+        ("次の5つから", "次のうちから"),
+        ("六つの選択肢", "選択肢"),
+        ("6つの選択肢", "選択肢"),
+        ("五つの選択肢", "選択肢"),
+        ("5つの選択肢", "選択肢"),
+        ("次の六つ", "次の選択肢"),
+        ("次の6つ", "次の選択肢"),
+        ("次の五つ", "次の選択肢"),
+        ("次の5つ", "次の選択肢")
     ]
     for old, new in replacements:
         text = text.replace(old, new)
     return text
 
+
+def find_local_text_file(local_dir: str, book_id: str) -> Optional[str]:
+    """ローカルの aozorabunko_text-master ディレクトリから作品IDに合致するtxtファイルを高速検索"""
+    if not local_dir or not os.path.exists(local_dir):
+        return None
+
+    clean_id = str(book_id).lstrip("0")
+    pattern = os.path.join(local_dir, "cards", "**", f"{clean_id}_*.txt")
+    matches = glob.glob(pattern, recursive=True)
+    if matches:
+        return matches[0]
+
+    pattern_zero = os.path.join(local_dir, "cards", "**", f"{book_id}_*.txt")
+    matches_zero = glob.glob(pattern_zero, recursive=True)
+    if matches_zero:
+        return matches_zero[0]
+
+    return None
+
+def load_text_from_file_or_download(local_dir: str, book: BookInfo) -> Optional[str]:
+    """ローカルのtxtファイルから優先読み込みし、無ければネットダウンロードを行わず即座にNoneを返して次の作品へスキップ"""
+    local_txt_path = find_local_text_file(local_dir, book.book_id)
+    if local_txt_path and os.path.exists(local_txt_path):
+        try:
+            with open(local_txt_path, "r", encoding="shift_jis", errors="ignore") as f:
+                content = f.read()
+                if content and len(content) > 100:
+                    print(f"   ⚡ [ローカル高速ロード] {os.path.basename(local_txt_path)}")
+                    return clean_aozora_text(content)
+        except Exception:
+            pass
+
+    # ローカルに見つからなかった場合は即座に次の作品へ進むため None を返す
+    return None
 
 def download_and_extract_text(zip_url: str) -> Optional[str]:
     """ZIPをダウンロードして中のテキストを取得"""
@@ -265,6 +338,37 @@ def download_and_extract_text(zip_url: str) -> Optional[str]:
         return None
 
 
+def extract_continuous_passage(clean_text: str, target_length: int) -> str:
+    """
+    Python側で、原文から指定文字数（target_length: ±10%以内）に収まる
+    完全に連続した「ツギハギ無しのひと繋がりの場面」を句切れ（。）単位で物理的に切り出す
+    """
+    text_length = len(clean_text)
+    if text_length <= target_length:
+        return clean_text
+
+    max_start = max(0, text_length - target_length - 200)
+    start_pos = random.randint(0, max_start)
+    if start_pos > 0:
+        idx = clean_text.find("。", start_pos)
+        start_pos = idx + 1 if (idx != -1 and idx < start_pos + 300) else start_pos
+
+    end_pos = start_pos + target_length
+    if end_pos >= text_length:
+        return clean_text[start_pos:]
+
+    stop_idx = clean_text.find("。", end_pos - 100)
+    if stop_idx != -1 and stop_idx < start_pos + target_length + 200:
+        end_pos = stop_idx + 1
+    else:
+        stop_idx2 = clean_text.find("。", start_pos + target_length // 2)
+        if stop_idx2 != -1:
+            end_pos = stop_idx2 + 1
+
+    passage = clean_text[start_pos:end_pos].strip()
+    return passage
+
+
 def generate_quiz_with_gemini(
     api_key: str,
     book: BookInfo,
@@ -272,11 +376,13 @@ def generate_quiz_with_gemini(
     level: str,
     genre: str,
     quiz_type: str = "choice",
+    passage_length: int = 1000,
+    option_count: int = 4,
     model_name: str = "gemini-3.5-flash-lite"
 ) -> Optional[Dict[str, Any]]:
     """Gemini API を使って問題を1件生成（選択問題または記述問題）"""
 
-    # 本文から8000文字程度抽出
+    # 本文から豊かな文脈（8000文字程度）をスニペットとして抽出
     extract_size = 8000
     text_length = len(clean_text)
     if text_length > extract_size:
@@ -293,87 +399,79 @@ def generate_quiz_with_gemini(
     if quiz_type == "essay":
         theme_id, theme_info = random.choice(list(THEMES_ESSAY.items()))
         prompt = f"""
-あなたは超一流の国語教師です。以下の実在する青空文庫作品の「抜粋テキスト」から、指定難易度（{level}）および【設問テーマ】に相応しい最高品質の国語【記述問題】を作成してください。
+あなたはプロの国語教師です。以下の抜粋テキストから、指定難易度（{level}）の国語【記述問題】を作成してください。
 
-【出典情報】
-作品名：{book.title}
-著者：{book.author}
-指定ジャンル：{genre}
-指定難易度：{level}
-
-【設問テーマ（最重要指示）】
-テーマ名: {theme_info['title']}
-設問の狙い: {theme_info['target']}
-作問ルール: {theme_info['rule']}
-
-【レベル別・作問ガイドライン】
-{guideline}
+【基本情報】
+・作品名: {book.title}（{book.author}）
+・ジャンル: {genre} / 難易度: {level}
+・作問指針: {guideline}
+・設問テーマ: {theme_info['title']}（{theme_info['target']}）
 
 【作成ルール】
-1. ガイドラインに従い、抜粋テキストから最適な一節を「1000文字程度」抽出してください。
-2. 【絶対厳守：本文の完全現代語訳（旧仮名遣い・大文字つ等の排除）】抽出した本文（text）について、旧仮名遣い（「ゐた」「座つていた」「走つた」「いふ」「思ふ」など）や旧字体、不自然な大文字の「つ」は完全に排除し、現代の中高生がスムーズに読める現代日本語・現代仮名遣い（「いた」「座っていた」「走った」「いう」「おもう」など）に完全に書き換えて出力してください。
-3. 【重要：あらすじの作成】抽出した場面に至るまでの作品の背景やストーリー展開を50文字程度で作成し、文末は必ず「〜〜場面である。」の形式で締めくくってください（例: 「メロスが王の悪行を知り、暴君退治を決意して城へ向かう場面である。」）。
-4. 本文内の核心箇所を一箇所だけ【傍線: 〇〇〇】で囲んでください。
-5. 【設問テーマに沿った記述問題の作成】本文の【傍線: 〇〇〇】に関して、上記設問テーマの指示ルールに厳格に従った記述問題（question）を作成してください。
-6. 【模範解答と採点基準の作成】指定文字数内に収まる最高品質の「模範解答（modelAnswer）」と、AIが採点する際の明確な「採点基準（gradingCriteria）」を箇条書きで作成してください。
-7. 【重要：問題の重複回避】同じような問題文や問題内容を完全に回避し、ユニークで独自の問題を作成してください。
+1. 本文（text）: 抜粋テキストから主要な場面を「{passage_length}文字程度」抽出・現代語訳してください。旧仮名遣いや古風な表記は完全排除し、現代人がスムーズに読める現代日本語（新字体・現代仮名遣い）に書き換えてください。核心箇所1箇所を【傍線: 〇〇〇】で囲んでください。
+2. あらすじ（synopsis）: 本文に至る背景を50文字程度で作成し、文末は「〜〜場面である。」で終えてください。
+3. 設問・解答: 本文のみに基づいて解ける記述問題文（question）、模範解答（modelAnswer）、採点基準（gradingCriteria）を作成してください。（※指示代名詞がある場合は具体的人名を補足すること）
+4. 解説（explanation）: 着眼点と解法のポイントを詳しく説明してください。
 
-【出力フォーマット】
-必ず以下のJSONオブジェクト形式のみを返却してください。
+【出力フォーマット (JSONのみ)】
 {{
   "title": "{book.title}（{book.author}）",
-  "synopsis": "抽出場面に至るまでの背景やあらすじ（50文字程度。必ず『〜〜場面である。』で終わること）",
-  "text": "1000文字程度の【現代語訳された本文】。必ず【傍線: 〇〇〇】を含めること。",
-  "question": "テーマに沿った記述問題文。",
-  "modelAnswer": "（模範解答）",
-  "gradingCriteria": "1. 〇〇に言及していること (+50点)\n2. 〇〇を説明していること (+50点)",
-  "explanation": "（解法のポイントと着眼点）"
+  "synopsis": "50文字程度のあらすじ（〜〜場面である。）",
+  "text": "{passage_length}文字程度の現代語訳された本文【傍線: 〇〇〇】",
+  "question": "記述問題文",
+  "modelAnswer": "模範解答",
+  "gradingCriteria": "1. 〇〇に言及 (+50点)\n2. 〇〇を説明 (+50点)",
+  "explanation": "詳細な解説"
 }}
 
-【対象テキスト（抜粋）】
+【対象テキスト】
 {snippet}
 """
     else:
         theme_id, theme_info = random.choice(list(THEMES_MULTIPLE_CHOICE.items()))
         prompt = f"""
-あなたは超一流の国語教師です。以下の実在する青空文庫作品の「抜粋テキスト」から、指定難易度（{level}）および【設問テーマ】に相応しい最高品質の国語問題（4択）を作成してください。
+あなたはプロの国語教師です。以下の抜粋テキストから、指定難易度（{level}）の国語問題を作成してください。
 
-【出典情報】
-作品名：{book.title}
-著者：{book.author}
-指定ジャンル：{genre}
-指定難易度：{level}
-
-【設問テーマ（最重要指示）】
-テーマ名: {theme_info['title']}
-設問の狙い: {theme_info['target']}
-作問ルール: {theme_info['rule']}
-
-【レベル別・作問ガイドライン】
-{guideline}
+【基本情報】
+・作品名: {book.title}（{book.author}）
+・ジャンル: {genre} / 難易度: {level}
+・レベル別指針: {guideline}
+・設問テーマ: {theme_info['title']}（{theme_info['target']}）
 
 【作成ルール】
-1. ガイドラインに従い、抜粋テキストから最適な一節を「1000文字程度」抽出してください。
-2. 【絶対厳守：本文の完全現代語訳（旧仮名遣い・大文字つ等の排除）】抽出した本文（text）について、旧仮名遣い（「ゐた」「座つていた」「走つた」「いふ」「思ふ」など）や旧字体、不自然な大文字の「つ」は完全に排除し、現代の中高生がスムーズに読める現代日本語・現代仮名遣い（「いた」「座っていた」「走った」「いう」「おもう」など）に完全に書き換えて出力してください。
-3. 【重要：あらすじの作成】抽出した場面に至るまでの作品の背景やストーリー展開を50文字程度で作成し、文末は必ず「〜〜場面である。」の形式で締めくくってください（例: 「メロスが王の悪行を知り、暴君退治を決意して城へ向かう場面である。」）。
-4. 本文内の核心箇所を一箇所だけ【傍線: 〇〇〇】で囲んでください。
-5. 【設問テーマに沿った4択問題の作成】上記設問テーマのルールに厳格に従って4択問題（questionおよびoptions）を作成してください。
-6. 解説では番号を使わず、選択肢の内容に基づいて {level} に相応しい着眼点で詳しく説明してください。
-7. 【重要：問題の重複回避】同じような問題文や同じような問題内容、選択肢の使い回しを完全に回避し、ユニークで独自の問題を作成してください。
+1. 本文（text）: 抜粋テキストから主要な場面を「{passage_length}文字程度」抽出・現代語訳してください。旧仮名遣いや古風な表記は完全排除し、スムーズに読める現代日本語（新字体・現代仮名遣い）に書き換えてください。文章内の核心箇所1箇所を【傍線: 〇〇〇】で囲んでください。
+2. あらすじ（synopsis）: 本文に至る背景を50文字程度で作成し、文末は「〜〜場面である。」で終えてください。
+3. 問題文（question）: 傍線部や場面全体に関する、指定難易度（{level}）に応じた適切な問を作成してください。（※具体的な選択肢数は書かないこと。代名詞がある場合は具体的人名を補足すること）
+4. 【最重要：選択肢および理由の作成】
+   ・正解の選択肢1個を「correctOption」として作成し、なぜ正解なのか（本文の注目箇所と理由）を reason に記載してください。
+   ・間違いの選択肢{option_count - 1}個を「wrongOptions」配列として作成し、それぞれなぜ不正解なのか（本文のどの記述と矛盾するか等の着眼点）を reason に記載してください。
+5. 解説（explanation）: 本文の着眼点と解法のポイントを詳しく説明してください。
 
-【出力フォーマット】
-必ず以下のJSONオブジェクト形式のみを返却してください。
+【出力フォーマット (JSONのみ)】
 {{
   "title": "{book.title}（{book.author}）",
-  "synopsis": "抽出場面に至るまでの背景やあらすじ（50文字程度。必ず『〜〜場面である。』で終わること）",
-  "text": "1000文字程度の【現代語訳された本文】。必ず【傍線: 〇〇〇】を含めること。",
-  "question": "テーマに沿った4択問題文。",
-  "options": ["選択肢1", "選択肢2", "選択肢3", "選択肢4"],
-  "correctAnswerIndex": 0〜3（正解位置は0〜3の数値）,
-  "explanation": "詳細な解説（番号言及禁止）"
+  "synopsis": "50文字程度のあらすじ（〜〜場面である。）",
+  "text": "{passage_length}文字程度の現代語訳された本文【傍線: 〇〇〇】",
+  "question": "テーマに沿った問題文（※選択肢数は書かない）",
+  "correctOption": {{
+    "text": "正解の選択肢文章",
+    "reason": "本文の【〇〇】に着目すると〇〇となるため正解。"
+  }},
+  "wrongOptions": [
+    {{
+      "text": "間違いの選択肢1",
+      "reason": "本文の【〇〇】という記述と矛盾するため不適。"
+    }},
+    {{
+      "text": "間違いの選択肢2",
+      "reason": "本文に記載のない解釈が含まれるため不適。"
+    }}
+    ...計{option_count - 1}個の誤答
+  ],
+  "explanation": "全体的な解法の着眼点と要点のまとめ解説"
 }}
 
-【対象テキスト（抜粋）】
+【対象テキスト】
 {snippet}
 """
 
@@ -421,15 +519,17 @@ def generate_quiz_with_gemini(
             cleaned_title = re.sub(r"（現代.*）", "", raw_title).strip()
             cleaned_title = re.sub(r"\(現代.*\)", "", cleaned_title).strip()
 
+            raw_question = normalize_modern_japanese(str(data.get("question", "")).strip())
+
             if quiz_type == "essay":
                 quiz_item = {
                     "id": str(uuid.uuid4()),
                     "title": cleaned_title,
                     "text": formatted_text,
-                    "question": data.get("question", ""),
+                    "question": raw_question,
                     "options": [],
                     "correctAnswerIndex": 0,
-                    "explanation": data.get("explanation", ""),
+                    "explanation": normalize_modern_japanese(str(data.get("explanation", "")).strip()),
                     "level": level,
                     "genre": genre,
                     "quizType": "ESSAY",
@@ -442,14 +542,39 @@ def generate_quiz_with_gemini(
                     "cardUrl": book.card_url
                 }
             else:
+                correct_opt = data.get("correctOption", {})
+                wrong_opts = data.get("wrongOptions", [])
+
+                if isinstance(correct_opt, dict) and "text" in correct_opt:
+                    correct_opt["text"] = normalize_modern_japanese(str(correct_opt["text"]))
+                    correct_opt["reason"] = normalize_modern_japanese(str(correct_opt.get("reason", "")))
+
+                if isinstance(wrong_opts, list):
+                    for wo in wrong_opts:
+                        if isinstance(wo, dict):
+                            wo["text"] = normalize_modern_japanese(str(wo.get("text", "")))
+                            wo["reason"] = normalize_modern_japanese(str(wo.get("reason", "")))
+
+                # テキスト一覧の構築
+                all_opt_texts = []
+                if isinstance(correct_opt, dict) and "text" in correct_opt:
+                    all_opt_texts.append(correct_opt["text"])
+                elif "options" in data and isinstance(data["options"], list):
+                    all_opt_texts.extend([normalize_modern_japanese(str(o)) for o in data["options"]])
+
+                if isinstance(wrong_opts, list):
+                    for wo in wrong_opts:
+                        if isinstance(wo, dict) and "text" in wo:
+                            all_opt_texts.append(wo["text"])
+
                 quiz_item = {
                     "id": str(uuid.uuid4()),
                     "title": cleaned_title,
                     "text": formatted_text,
-                    "question": data.get("question", ""),
-                    "options": data.get("options", []),
-                    "correctAnswerIndex": int(data.get("correctAnswerIndex", 0)),
-                    "explanation": data.get("explanation", ""),
+                    "question": raw_question,
+                    "options": all_opt_texts,
+                    "correctAnswerIndex": 0,
+                    "explanation": normalize_modern_japanese(str(data.get("explanation", "")).strip()),
                     "level": level,
                     "genre": genre,
                     "quizType": "MULTIPLE_CHOICE",
@@ -459,7 +584,136 @@ def generate_quiz_with_gemini(
                     "themeTitle": theme_info["title"],
                     "themeTarget": theme_info["target"],
                     "bookId": book.book_id,
+                    "cardUrl": book.card_url,
+                    "rawOptions": all_opt_texts,
+                    "correctOption": correct_opt if isinstance(correct_opt, dict) else None,
+                    "wrongOptions": wrong_opts if isinstance(wrong_opts, list) else []
+                }
+
+            return quiz_item
+
+        except Exception as e:
+            print(f"  [Warn] Gemini生成エラー(試行 {attempt}/{max_retries}): {e}")
+            if attempt < max_retries:
+                wait_sec = 15 * attempt
+                print(f"   -> サーバーの過負荷/一時的エラーのため {wait_sec}秒間 待機して自動再試行します...")
+                time.sleep(wait_sec)
+            else:
+                return None
+
+    max_retries = 3
+    for attempt in range(1, max_retries + 1):
+        try:
+            raw_response_text = ""
+            if HAS_GENAI_LIB:
+                client = genai.Client(api_key=api_key)
+                response = client.models.generate_content(
+                    model=model_name,
+                    contents=prompt,
+                    config=types.GenerateContentConfig(
+                        response_mime_type="application/json"
+                    )
+                )
+                raw_response_text = response.text
+            else:
+                # SDKがない場合はDirect REST Call
+                url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={api_key}"
+                payload = {
+                    "contents": [{"parts": [{"text": prompt}]}],
+                    "generationConfig": {"responseMimeType": "application/json"}
+                }
+                data = json.dumps(payload).encode("utf-8")
+                req = urllib.request.Request(url, data=data, headers={"Content-Type": "application/json"})
+                with urllib.request.urlopen(req, timeout=30) as resp:
+                    res_json = json.loads(resp.read().decode("utf-8"))
+                    raw_response_text = res_json["candidates"][0]["content"]["parts"][0]["text"]
+
+            # クリーニング
+            raw_text = raw_response_text.strip()
+            if raw_text.startswith("```"):
+                raw_text = re.sub(r"^```(json)?", "", raw_text).strip()
+                raw_text = re.sub(r"```$", "", raw_text).strip()
+
+            data = json.loads(raw_text)
+
+            synopsis = str(data.get("synopsis", "")).strip()
+            body_text = str(data.get("text", "")).strip()
+            formatted_text = f"【あらすじ】\n{synopsis}\n\n【本文】\n{body_text}" if synopsis else body_text
+            formatted_text = normalize_modern_japanese(formatted_text)
+
+            raw_title = str(data.get("title", f"{book.title}（{book.author}）")).strip()
+            cleaned_title = re.sub(r"（現代.*）", "", raw_title).strip()
+            cleaned_title = re.sub(r"\(現代.*\)", "", cleaned_title).strip()
+
+            raw_question = normalize_modern_japanese(str(data.get("question", "")).strip())
+
+            if quiz_type == "essay":
+                quiz_item = {
+                    "id": str(uuid.uuid4()),
+                    "title": cleaned_title,
+                    "text": formatted_text,
+                    "question": raw_question,
+                    "options": [],
+                    "correctAnswerIndex": 0,
+                    "explanation": normalize_modern_japanese(str(data.get("explanation", "")).strip()),
+                    "level": level,
+                    "genre": genre,
+                    "quizType": "ESSAY",
+                    "modelAnswer": data.get("modelAnswer", ""),
+                    "gradingCriteria": data.get("gradingCriteria", ""),
+                    "themeTypeId": theme_id,
+                    "themeTitle": theme_info["title"],
+                    "themeTarget": theme_info["target"],
+                    "bookId": book.book_id,
                     "cardUrl": book.card_url
+                }
+            else:
+                correct_opt = data.get("correctOption", {})
+                wrong_opts = data.get("wrongOptions", [])
+
+                if isinstance(correct_opt, dict) and "text" in correct_opt:
+                    correct_opt["text"] = normalize_modern_japanese(str(correct_opt["text"]))
+                    correct_opt["reason"] = normalize_modern_japanese(str(correct_opt.get("reason", "")))
+
+                if isinstance(wrong_opts, list):
+                    for wo in wrong_opts:
+                        if isinstance(wo, dict):
+                            wo["text"] = normalize_modern_japanese(str(wo.get("text", "")))
+                            wo["reason"] = normalize_modern_japanese(str(wo.get("reason", "")))
+
+                # テキスト一覧の構築
+                all_opt_texts = []
+                if isinstance(correct_opt, dict) and "text" in correct_opt:
+                    all_opt_texts.append(correct_opt["text"])
+                elif "options" in data and isinstance(data["options"], list):
+                    all_opt_texts.extend([normalize_modern_japanese(str(o)) for o in data["options"]])
+
+                if isinstance(wrong_opts, list):
+                    for wo in wrong_opts:
+                        if isinstance(wo, dict) and "text" in wo:
+                            all_opt_texts.append(wo["text"])
+
+                quiz_item = {
+                    "id": str(uuid.uuid4()),
+                    "title": cleaned_title,
+                    "text": formatted_text,
+                    "question": raw_question,
+                    "options": all_opt_texts,
+                    "correctAnswerIndex": 0,
+                    "explanation": normalize_modern_japanese(str(data.get("explanation", "")).strip()),
+                    "level": level,
+                    "genre": genre,
+                    "quizType": "MULTIPLE_CHOICE",
+                    "modelAnswer": None,
+                    "gradingCriteria": None,
+                    "themeTypeId": theme_id,
+                    "themeTitle": theme_info["title"],
+                    "themeTarget": theme_info["target"],
+                    "bookId": book.book_id,
+                    "cardUrl": book.card_url,
+                    "rawOptions": all_opt_texts,
+                    "correctOption": correct_opt if isinstance(correct_opt, dict) else None,
+                    "wrongOptions": wrong_opts if isinstance(wrong_opts, list) else []
                 }
 
                 # 選択肢のシャッフル（正解インデックスの自動調整）
@@ -531,13 +785,21 @@ def pack_quizzes(output_dir: str, pack_size: int = 100):
 
 def main():
     parser = argparse.ArgumentParser(description="青空文庫から問題データ一括生成ツール")
-    parser.add_argument("--api_key", type=str, default=os.getenv("GEMINI_API_KEY", ""), help="Gemini API Key")
+    parser.add_argument("--api_key", type=str, default=os.getenv("GEMINI_API_KEY", ""), help="Gemini API Key (生成用)")
+    parser.add_argument("--refine_api_key", type=str, default="", help="Gemini API Key (現代語訳校正用。空なら--api_keyを使用)")
     parser.add_argument("--csv", type=str, default="../app/src/main/assets/aozora_works.csv", help="aozora_works.csv のパス")
+    parser.add_argument("--local_text_dir", type=str, default=r"C:\Users\mamox\Desktop\aozorabunko_text-master", help="ローカルの青空文庫テキストフォルダーパス")
     parser.add_argument("--count_per_category", type=int, default=10, help="1つの(難易度×ジャンル)あたりの目標生成数")
     parser.add_argument("--output_dir", type=str, default="./quiz_output", help="出力先ディレクトリ")
     parser.add_argument("--model", type=str, default="gemini-3.5-flash-lite", help="Geminiモデル名")
     parser.add_argument("--interval", type=int, default=10, help="生成間隔（秒）。RPM制限回避用（デフォルト: 10秒）")
     parser.add_argument("--quiz_type", type=str, choices=["choice", "essay"], default="choice", help="問題形式: choice (選択問題) または essay (記述問題)")
+    parser.add_argument("--passage_length", type=int, default=1000, help="本文抽出の目標文字数（デフォルト: 1000文字）")
+    parser.add_argument("--passage_length_highschool", type=int, default=800, help="高校入試レベル本文文字数（デフォルト: 800文字）")
+    parser.add_argument("--passage_length_common_test", type=int, default=1200, help="共通テストレベル本文文字数（デフォルト: 1200文字）")
+    parser.add_argument("--passage_length_difficult_univ", type=int, default=1500, help="難関大学レベル本文文字数（デフォルト: 1500文字）")
+    parser.add_argument("--chars_per_quiz", type=int, default=5000, help="何文字につき1問作成するか（デフォルト: 5000文字）")
+    parser.add_argument("--option_count", type=int, default=6, help="生成時の選択肢プール数（デフォルト: 6択[正解1+誤答5]）")
     parser.add_argument("--category", type=str, default="", help="カテゴリ指定 (例: difficult_novel, highschool_essay など)")
     parser.add_argument("--level", type=str, default="", help="難易度指定 (例: normal, common_test, difficult_univ など)")
     parser.add_argument("--genre", type=str, default="", help="ジャンル指定 (例: novel, essay など)")
@@ -582,7 +844,10 @@ def main():
     print(f"・出力先: {args.output_dir}\n")
 
     books_by_genre = load_books_from_csv(args.csv)
-    print(f"作品ロード完了: 小説 {len(books_by_genre['小説'])}件, 評論 {len(books_by_genre['評論'])}件")
+    print(f"作品ロード完了: 小説 {len(books_by_genre['novel'])}件 (easy: {len(books_by_genre['novel-easy'])}件), 評論 {len(books_by_genre['essay'])}件 (easy: {len(books_by_genre['essay-easy'])}件)")
+
+    # 実行セッション全体でスキップ済み（ローカル未検出/短文）の作品IDを記憶するセット
+    globally_skipped_book_ids = set()
 
     for level in target_levels:
         level_dir_name = LEVEL_DIR_MAP[level]
@@ -602,15 +867,19 @@ def main():
                     existing_quizzes = []
 
             needed = args.count_per_category - len(existing_quizzes)
-            print(f"\n--- 処理中: [{level}] ✕ [{genre}] (既存: {len(existing_quizzes)}問 / 目標: {args.count_per_category}問) ---")
+            p_bar_init = make_progress_bar(len(existing_quizzes), args.count_per_category)
+            print(f"\n==================================================")
+            print(f" 📂 カテゴリ: [{level}] x [{genre}]")
+            print(f" 📊 現在の進捗: {p_bar_init}")
+            print(f"==================================================")
 
             if needed <= 0:
-                print("  目標数を達成しているためスキップします。")
+                print("  🎉 目標の作成数を達成しているためスキップします。")
                 continue
 
-            candidate_books = books_by_genre.get(genre, [])
+            candidate_books = get_candidate_books(books_by_genre, level, genre)
             if not candidate_books:
-                print("  該当ジャンルの作品がCSV内にありません。")
+                print("  該当レベル・ジャンルの作品がCSV内にありません。")
                 continue
 
             existing_questions = {q.get("question", "") for q in existing_quizzes if isinstance(q, dict)}
@@ -620,23 +889,36 @@ def main():
             }
             generated_count = 0
 
+            # レベルごとの本文目標文字数を決定
+            if level == "高校入試レベル":
+                effective_passage_length = args.passage_length_highschool
+            elif level == "共通テストレベル":
+                effective_passage_length = args.passage_length_common_test
+            elif level == "難関大学レベル":
+                effective_passage_length = args.passage_length_difficult_univ
+            else:
+                effective_passage_length = args.passage_length
+
             # 作品IDの若い順（昇順）に未作成の作品から順次選定
             for book in candidate_books:
                 if len(existing_quizzes) >= args.count_per_category:
                     break
 
-                # 既に過去に問題作成済みの作品はスキップ（未作成の中で一番IDが若い作品へ進む）
-                if str(book.book_id) in processed_book_ids:
+                book_id_str = str(book.book_id)
+
+                # 既に過去に問題作成済み、または一度でもスキップされた作品は二度と読み込まない
+                if book_id_str in processed_book_ids or book_id_str in globally_skipped_book_ids:
                     continue
 
-                clean_text = download_and_extract_text(book.zip_url)
+                clean_text = load_text_from_file_or_download(args.local_text_dir, book)
                 if not clean_text or len(clean_text) < 1000:
+                    globally_skipped_book_ids.add(book_id_str) # 二度と試さないよう記憶
+                    print(f"   ⏩ [ローカル未検出/短文のためスキップ] ID: {book.book_id} 『{book.title}』 ➔ 次の作品を自動検索します")
                     continue
 
                 text_length = len(clean_text)
-                # 5,000文字あたり1問（5,000文字未満は1問）
-                num_questions = max(1, math.ceil(text_length / 5000))
-                print(f" -> 新規作品選択(ID: {book.book_id}): 『{book.title}』（{book.author}） - {text_length}字 -> 最大{num_questions}問作成")
+                num_questions = max(1, math.ceil(text_length / args.chars_per_quiz))
+                print(f" 📖 作品選択(ID: {book.book_id}): 『{book.title}』（{book.author}） - {text_length}字 ➔ 最大{num_questions}問作成 (目標文字数: {effective_passage_length}字)")
 
                 for q_idx in range(num_questions):
                     if len(existing_quizzes) >= args.count_per_category:
@@ -649,23 +931,35 @@ def main():
                         level=level,
                         genre=genre,
                         quiz_type=args.quiz_type,
+                        passage_length=effective_passage_length,
+                        option_count=args.option_count,
                         model_name=args.model
                     )
 
                     if quiz and quiz.get("question") not in existing_questions:
+                        refine_key = args.refine_api_key.strip() if hasattr(args, 'refine_api_key') and args.refine_api_key and args.refine_api_key.strip() else args.api_key
+                        if refine_quiz_item and refine_key:
+                            print(f"   ✨ [現代語訳自動校正] 現代語訳・難易度最適化を実行中...")
+                            quiz = refine_quiz_item(api_key=refine_key, quiz=quiz, model_name=args.model)
+
                         existing_quizzes.append(quiz)
                         existing_questions.add(quiz.get("question", ""))
                         processed_book_ids.add(str(book.book_id))
                         generated_count += 1
-                        print(f"   [成功] 生成完了 ({len(existing_quizzes)}/{args.count_per_category}) [{q_idx + 1}/{num_questions}問目]")
+
+                        p_bar = make_progress_bar(len(existing_quizzes), args.count_per_category)
+                        print(f"   ✅ [成功・自動校正済] {p_bar} 『{book.title}』({q_idx + 1}/{num_questions}問目)")
 
                         # こまめにファイル保存
                         with open(raw_file, "w", encoding="utf-8") as f:
                             json.dump(existing_quizzes, f, ensure_ascii=False, indent=2)
 
-                    # レート制限（RPM）回避のため指定秒数ウェイト（デフォルト10秒）
-                    print(f"   [待機] レート制限回避のため {args.interval} 秒間待機します...")
+                    # レート制限（RPM）回避のため指定秒数ウェイト
+                    print(f"   ⏳ [待機] レート制限回避のため {args.interval} 秒間待機中...")
                     time.sleep(args.interval)
+
+            p_bar_final = make_progress_bar(len(existing_quizzes), args.count_per_category)
+            print(f"   🎉 [完了] [{level}] x [{genre}] 処理終了: {p_bar_final}")
 
     # 最後にパケット化処理
     pack_quizzes(args.output_dir)
