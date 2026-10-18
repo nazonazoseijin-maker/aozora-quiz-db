@@ -34,7 +34,10 @@ DEFAULT_CONFIG = {
     "apiKey": "",
     "refineApiKey": "",
     "category": "",
-    "quizType": "choice",
+    "quizType": "auto",
+    "choiceRatio": "70",
+    "autoLoop": "false",
+    "autoPushInterval": "3600",
     "count": "50",
     "localTextDir": r"C:\Users\mamox\Desktop\aozorabunko_text-master",
     "passageLength": "1000",
@@ -245,7 +248,7 @@ HTML_PAGE = """<!DOCTYPE html>
                         <div class="form-group">
                             <label for="category">カテゴリ（難易度 / ジャンル）</label>
                             <select id="category" name="category">
-                                <option value="">すべて（全6パターン順次生成）</option>
+                                <option value="" selected>全パターン自動巡回（全6パターン順次生成）</option>
                                 <option value="highschool_novel">高校入試レベル ✕ 小説 (highschool_novel)</option>
                                 <option value="highschool_essay">高校入試レベル ✕ 評論 (highschool_essay)</option>
                                 <option value="common_test_novel">共通テストレベル ✕ 小説 (common_test_novel)</option>
@@ -258,14 +261,20 @@ HTML_PAGE = """<!DOCTYPE html>
                         <div class="form-group">
                             <label for="quizType">問題形式</label>
                             <select id="quizType" name="quizType">
-                                <option value="choice">四択問題 (choice)</option>
-                                <option value="essay">記述問題 / AI添削 (essay)</option>
+                                <option value="auto" selected>指定比率で自動決定 (選択 / 記述)</option>
+                                <option value="choice">四択問題 (choice) のみ</option>
+                                <option value="essay">記述問題 / AI添削 (essay) のみ</option>
                             </select>
                         </div>
 
                         <div class="form-group">
-                            <label for="count">カテゴリごとの目標問題数</label>
-                            <input type="number" id="count" name="count" value="50" min="1" max="1000">
+                            <label for="choiceRatio">選択問題の生成比率 (%) ※残りが記述問題</label>
+                            <input type="number" id="choiceRatio" name="choiceRatio" value="70" min="0" max="100">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="count">カテゴリごとの新規追加目標問題数（例: 100問）</label>
+                            <input type="number" id="count" name="count" value="100" min="1" max="1000">
                         </div>
 
                         <div class="form-group">
@@ -707,7 +716,8 @@ def worker_thread(action: str, config: dict):
     refine_api_key = config.get("refineApiKey", "").strip() or api_key
     local_text_dir = config.get("localTextDir", r"C:\Users\mamox\Desktop\aozorabunko_text-master")
     category = config.get("category", "")
-    quiz_type = config.get("quizType", "choice")
+    quiz_type = config.get("quizType", "auto")
+    choice_ratio = config.get("choiceRatio", "70")
     count = config.get("count", "50")
     passage_length_hs = config.get("passageLengthHighschool", "800")
     passage_length_ct = config.get("passageLengthCommonTest", "1200")
@@ -729,6 +739,7 @@ def worker_thread(action: str, config: dict):
                 f"--count_per_category={count}",
                 f"--interval={interval}",
                 f"--quiz_type={quiz_type}",
+                f"--choice_ratio={choice_ratio}",
                 f"--passage_length_highschool={passage_length_hs}",
                 f"--passage_length_common_test={passage_length_ct}",
                 f"--passage_length_difficult_univ={passage_length_du}",

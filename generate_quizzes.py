@@ -30,7 +30,17 @@ import argparse
 import math
 import glob
 import functools
+from datetime import datetime, timezone, timedelta
 from typing import List, Dict, Any, Optional
+
+def get_seconds_until_1715_jst() -> float:
+    """現在時刻(JST = UTC+9)から次の 17:15 (JST) までの待機秒数を計算"""
+    jst = timezone(timedelta(hours=9))
+    now_jst = datetime.now(jst)
+    target_jst = now_jst.replace(hour=17, minute=15, second=0, microsecond=0)
+    if now_jst >= target_jst:
+        target_jst += timedelta(days=1)
+    return (target_jst - now_jst).total_seconds()
 
 try:
     from refine_quizzes import refine_quiz_item
@@ -503,6 +513,9 @@ def generate_quiz_with_gemini(
                     raw_response_text = res_json["candidates"][0]["content"]["parts"][0]["text"]
 
             # クリーニング
+            if not raw_response_text:
+                raise ValueError("Gemini APIからの応答テキストが空(None)です（セーフティフィルター等によるブロックの可能性があります）")
+
             raw_text = raw_response_text.strip()
             if raw_text.startswith("```"):
                 raw_text = re.sub(r"^```(json)?", "", raw_text).strip()
@@ -593,148 +606,31 @@ def generate_quiz_with_gemini(
             return quiz_item
 
         except Exception as e:
-            print(f"  [Warn] Gemini生成エラー(試行 {attempt}/{max_retries}): {e}")
-            if attempt < max_retries:
-                wait_sec = 15 * attempt
-                print(f"   -> サーバーの過負荷/一時的エラーのため {wait_sec}秒間 待機して自動再試行します...")
+            err_str = str(e)
+            if "429" in err_str or "RESOURCE_EXHAUSTED" in err_str or "Quota" in err_str or "too many requests" in err_str.lower():
+                wait_sec = get_seconds_until_1715_jst()
+                hours = int(wait_sec // 3600)
+                minutes = int((wait_sec % 3600) // 60)
+                seconds = int(wait_sec % 60)
+                print(f"\n  [⚠️ 429 Rate Limit Detected] Gemini APIのクォータ制限(429)を検出しました。")
+                print(f"  -> 次回の日本時間 17:15 (残り {hours}時間 {minutes}分 {seconds}秒) まで一時停止します...")
                 time.sleep(wait_sec)
+                print(f"  -> 17:15 になりました。自動再開します...\n")
+                continue
             else:
-                return None
+                print(f"  [Warn] Gemini生成エラー(試行 {attempt}/{max_retries}): {e}")
+                if attempt < max_retries:
+                    wait_sec = 15 * attempt
+                    print(f"   -> サーバーの過負荷/一時的エラーのため {wait_sec}秒間 待機して自動再試行します...")
+                    time.sleep(wait_sec)
+                else:
+                    return None
 
-    max_retries = 3
-    for attempt in range(1, max_retries + 1):
-        try:
-            raw_response_text = ""
-            if HAS_GENAI_LIB:
-                client = genai.Client(api_key=api_key)
-                response = client.models.generate_content(
-                    model=model_name,
-                    contents=prompt,
-                    config=types.GenerateContentConfig(
-                        response_mime_type="application/json"
-                    )
-                )
-                raw_response_text = response.text
-            else:
-                # SDKがない場合はDirect REST Call
-                url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={api_key}"
-                payload = {
-                    "contents": [{"parts": [{"text": prompt}]}],
-                    "generationConfig": {"responseMimeType": "application/json"}
-                }
-                data = json.dumps(payload).encode("utf-8")
-                req = urllib.request.Request(url, data=data, headers={"Content-Type": "application/json"})
-                with urllib.request.urlopen(req, timeout=30) as resp:
-                    res_json = json.loads(resp.read().decode("utf-8"))
-                    raw_response_text = res_json["candidates"][0]["content"]["parts"][0]["text"]
-
-            # クリーニング
-            raw_text = raw_response_text.strip()
-            if raw_text.startswith("```"):
-                raw_text = re.sub(r"^```(json)?", "", raw_text).strip()
-                raw_text = re.sub(r"```$", "", raw_text).strip()
-
-            data = json.loads(raw_text)
-
-            synopsis = str(data.get("synopsis", "")).strip()
-            body_text = str(data.get("text", "")).strip()
-            formatted_text = f"【あらすじ】\n{synopsis}\n\n【本文】\n{body_text}" if synopsis else body_text
-            formatted_text = normalize_modern_japanese(formatted_text)
-
-            raw_title = str(data.get("title", f"{book.title}（{book.author}）")).strip()
-            cleaned_title = re.sub(r"（現代.*）", "", raw_title).strip()
-            cleaned_title = re.sub(r"\(現代.*\)", "", cleaned_title).strip()
-
-            raw_question = normalize_modern_japanese(str(data.get("question", "")).strip())
-
-            if quiz_type == "essay":
-                quiz_item = {
-                    "id": str(uuid.uuid4()),
-                    "title": cleaned_title,
-                    "text": formatted_text,
-                    "question": raw_question,
-                    "options": [],
-                    "correctAnswerIndex": 0,
-                    "explanation": normalize_modern_japanese(str(data.get("explanation", "")).strip()),
-                    "level": level,
-                    "genre": genre,
-                    "quizType": "ESSAY",
-                    "modelAnswer": data.get("modelAnswer", ""),
-                    "gradingCriteria": data.get("gradingCriteria", ""),
-                    "themeTypeId": theme_id,
-                    "themeTitle": theme_info["title"],
-                    "themeTarget": theme_info["target"],
-                    "bookId": book.book_id,
-                    "cardUrl": book.card_url
-                }
-            else:
-                correct_opt = data.get("correctOption", {})
-                wrong_opts = data.get("wrongOptions", [])
-
-                if isinstance(correct_opt, dict) and "text" in correct_opt:
-                    correct_opt["text"] = normalize_modern_japanese(str(correct_opt["text"]))
-                    correct_opt["reason"] = normalize_modern_japanese(str(correct_opt.get("reason", "")))
-
-                if isinstance(wrong_opts, list):
-                    for wo in wrong_opts:
-                        if isinstance(wo, dict):
-                            wo["text"] = normalize_modern_japanese(str(wo.get("text", "")))
-                            wo["reason"] = normalize_modern_japanese(str(wo.get("reason", "")))
-
-                # テキスト一覧の構築
-                all_opt_texts = []
-                if isinstance(correct_opt, dict) and "text" in correct_opt:
-                    all_opt_texts.append(correct_opt["text"])
-                elif "options" in data and isinstance(data["options"], list):
-                    all_opt_texts.extend([normalize_modern_japanese(str(o)) for o in data["options"]])
-
-                if isinstance(wrong_opts, list):
-                    for wo in wrong_opts:
-                        if isinstance(wo, dict) and "text" in wo:
-                            all_opt_texts.append(wo["text"])
-
-                quiz_item = {
-                    "id": str(uuid.uuid4()),
-                    "title": cleaned_title,
-                    "text": formatted_text,
-                    "question": raw_question,
-                    "options": all_opt_texts,
-                    "correctAnswerIndex": 0,
-                    "explanation": normalize_modern_japanese(str(data.get("explanation", "")).strip()),
-                    "level": level,
-                    "genre": genre,
-                    "quizType": "MULTIPLE_CHOICE",
-                    "modelAnswer": None,
-                    "gradingCriteria": None,
-                    "themeTypeId": theme_id,
-                    "themeTitle": theme_info["title"],
-                    "themeTarget": theme_info["target"],
-                    "bookId": book.book_id,
-                    "cardUrl": book.card_url,
-                    "rawOptions": all_opt_texts,
-                    "correctOption": correct_opt if isinstance(correct_opt, dict) else None,
-                    "wrongOptions": wrong_opts if isinstance(wrong_opts, list) else []
-                }
-
-                # 選択肢のシャッフル（正解インデックスの自動調整）
-                options_with_correct = [(opt, i == quiz_item["correctAnswerIndex"]) for i, opt in enumerate(quiz_item["options"])]
-                random.shuffle(options_with_correct)
-                quiz_item["options"] = [item[0] for item in options_with_correct]
-                quiz_item["correctAnswerIndex"] = next(i for i, item in enumerate(options_with_correct) if item[1])
-
-            return quiz_item
-
-        except Exception as e:
-            print(f"  [Warn] Gemini生成エラー(試行 {attempt}/{max_retries}): {e}")
-            if attempt < max_retries:
-                wait_sec = 15 * attempt
-                print(f"   -> サーバーの過負荷/一時的エラーのため {wait_sec}秒間 待機して自動再試行します...")
-                time.sleep(wait_sec)
-            else:
-                return None
+    return None
 
 
 def pack_quizzes(output_dir: str, pack_size: int = 100):
+
     """ディレクトリ内のデータを100問ずつの pack_XXX.json にパケット化し、index.json を作成"""
     index_manifest = {"categories": {}}
 
@@ -793,7 +689,8 @@ def main():
     parser.add_argument("--output_dir", type=str, default="./quiz_output", help="出力先ディレクトリ")
     parser.add_argument("--model", type=str, default="gemini-3.5-flash-lite", help="Geminiモデル名")
     parser.add_argument("--interval", type=int, default=10, help="生成間隔（秒）。RPM制限回避用（デフォルト: 10秒）")
-    parser.add_argument("--quiz_type", type=str, choices=["choice", "essay"], default="choice", help="問題形式: choice (選択問題) または essay (記述問題)")
+    parser.add_argument("--quiz_type", type=str, choices=["choice", "essay", "auto"], default="choice", help="問題形式: choice (選択問題), essay (記述問題), auto (指定比率で自動決定)")
+    parser.add_argument("--choice_ratio", type=int, default=70, help="quiz_type=autoの場合の選択問題比率 (0-100)。残りが記述問題")
     parser.add_argument("--passage_length", type=int, default=1000, help="本文抽出の目標文字数（デフォルト: 1000文字）")
     parser.add_argument("--passage_length_highschool", type=int, default=800, help="高校入試レベル本文文字数（デフォルト: 800文字）")
     parser.add_argument("--passage_length_common_test", type=int, default=1200, help="共通テストレベル本文文字数（デフォルト: 1200文字）")
@@ -866,16 +763,27 @@ def main():
                 except Exception:
                     existing_quizzes = []
 
-            needed = args.count_per_category - len(existing_quizzes)
-            p_bar_init = make_progress_bar(len(existing_quizzes), args.count_per_category)
+            target_new_total = args.count_per_category
+            if args.quiz_type == "choice":
+                target_choice_count = target_new_total
+                target_essay_count = 0
+            elif args.quiz_type == "essay":
+                target_choice_count = 0
+                target_essay_count = target_new_total
+            else:
+                target_choice_count = int(round(target_new_total * (args.choice_ratio / 100.0)))
+                target_essay_count = target_new_total - target_choice_count
+
+            session_new_count = 0
+            session_choice_count = 0
+            session_essay_count = 0
+
+            p_bar_init = make_progress_bar(0, target_new_total)
             print(f"\n==================================================")
             print(f" 📂 カテゴリ: [{level}] x [{genre}]")
-            print(f" 📊 現在の進捗: {p_bar_init}")
+            print(f" 📊 既存蓄積数: {len(existing_quizzes)}問 ➔ 今回新規作成目標: {target_new_total}問 (選択{target_choice_count}問 / 記述{target_essay_count}問)")
+            print(f" 📊 進捗: {p_bar_init}")
             print(f"==================================================")
-
-            if needed <= 0:
-                print("  🎉 目標の作成数を達成しているためスキップします。")
-                continue
 
             candidate_books = get_candidate_books(books_by_genre, level, genre)
             if not candidate_books:
@@ -887,7 +795,6 @@ def main():
                 str(q.get("bookId")) for q in existing_quizzes
                 if isinstance(q, dict) and q.get("bookId")
             }
-            generated_count = 0
 
             # レベルごとの本文目標文字数を決定
             if level == "高校入試レベル":
@@ -901,7 +808,7 @@ def main():
 
             # 作品IDの若い順（昇順）に未作成の作品から順次選定
             for book in candidate_books:
-                if len(existing_quizzes) >= args.count_per_category:
+                if session_new_count >= target_new_total:
                     break
 
                 book_id_str = str(book.book_id)
@@ -921,8 +828,19 @@ def main():
                 print(f" 📖 作品選択(ID: {book.book_id}): 『{book.title}』（{book.author}） - {text_length}字 ➔ 最大{num_questions}問作成 (目標文字数: {effective_passage_length}字)")
 
                 for q_idx in range(num_questions):
-                    if len(existing_quizzes) >= args.count_per_category:
+                    if session_new_count >= target_new_total:
                         break
+
+                    current_quiz_type = args.quiz_type
+                    if current_quiz_type == "auto":
+                        if session_choice_count < target_choice_count and session_essay_count < target_essay_count:
+                            current_quiz_type = "choice" if random.randint(0, 99) < args.choice_ratio else "essay"
+                        elif session_choice_count < target_choice_count:
+                            current_quiz_type = "choice"
+                        elif session_essay_count < target_essay_count:
+                            current_quiz_type = "essay"
+                        else:
+                            current_quiz_type = "choice"
 
                     quiz = generate_quiz_with_gemini(
                         api_key=args.api_key,
@@ -930,7 +848,7 @@ def main():
                         clean_text=clean_text,
                         level=level,
                         genre=genre,
-                        quiz_type=args.quiz_type,
+                        quiz_type=current_quiz_type,
                         passage_length=effective_passage_length,
                         option_count=args.option_count,
                         model_name=args.model
@@ -945,10 +863,14 @@ def main():
                         existing_quizzes.append(quiz)
                         existing_questions.add(quiz.get("question", ""))
                         processed_book_ids.add(str(book.book_id))
-                        generated_count += 1
+                        session_new_count += 1
+                        if quiz.get("quizType") == "ESSAY":
+                            session_essay_count += 1
+                        else:
+                            session_choice_count += 1
 
-                        p_bar = make_progress_bar(len(existing_quizzes), args.count_per_category)
-                        print(f"   ✅ [成功・自動校正済] {p_bar} 『{book.title}』({q_idx + 1}/{num_questions}問目)")
+                        p_bar = make_progress_bar(session_new_count, target_new_total)
+                        print(f"   ✅ [成功・自動校正済] {p_bar} (選択{session_choice_count}/{target_choice_count}, 記述{session_essay_count}/{target_essay_count}) 『{book.title}』({q_idx + 1}/{num_questions}問目)")
 
                         # こまめにファイル保存
                         with open(raw_file, "w", encoding="utf-8") as f:
@@ -958,8 +880,9 @@ def main():
                     print(f"   ⏳ [待機] レート制限回避のため {args.interval} 秒間待機中...")
                     time.sleep(args.interval)
 
-            p_bar_final = make_progress_bar(len(existing_quizzes), args.count_per_category)
-            print(f"   🎉 [完了] [{level}] x [{genre}] 処理終了: {p_bar_final}")
+            p_bar_final = make_progress_bar(session_new_count, target_new_total)
+            print(f"   🎉 [完了] [{level}] x [{genre}] 新規追加完了: {p_bar_final} (選択{session_choice_count}問 / 記述{session_essay_count}問)")
+
 
     # 最後にパケット化処理
     pack_quizzes(args.output_dir)
