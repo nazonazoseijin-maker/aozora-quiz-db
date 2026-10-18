@@ -16,7 +16,8 @@
     "themeTitle": "心情変化・背景説明",
     "themeTarget": "描写を根拠に登場人物の心理や経緯を自分の言葉で説明する力を問う",
     "bookId": "38",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card38.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card38.html",
+    "correctOption": null
   },
   {
     "id": "25690961-cb3b-410c-8969-50d9a24953f9",
@@ -40,7 +41,8 @@
     "themeTitle": "要素まとめ（短文記述）",
     "themeTarget": "本文から必要な要素を集約・整理してまとめる力を問う",
     "bookId": "38",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card38.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card38.html",
+    "correctOption": null
   },
   {
     "id": "facedf8b-6534-4148-9dde-9d19cbb3209c",
@@ -64,7 +66,8 @@
     "themeTitle": "要素まとめ（短文記述）",
     "themeTarget": "本文から必要な要素を集約・整理してまとめる力を問う",
     "bookId": "38",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card38.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card38.html",
+    "correctOption": null
   },
   {
     "id": "c95f86ee-aebe-493d-bff2-92b7b3c25d29",
@@ -83,7 +86,8 @@
     "themeTitle": "要約・全体説明（長文記述）",
     "themeTarget": "論理構造を整理して論理的に構成する総合的な要約力を問う",
     "bookId": "38",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card38.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card38.html",
+    "correctOption": null
   },
   {
     "id": "97758242-698c-46d4-840e-e8c0209db0a0",
@@ -107,7 +111,8 @@
     "themeTitle": "心情変化・背景説明",
     "themeTarget": "描写を根拠に登場人物の心理や経緯を自分の言葉で説明する力を問う",
     "bookId": "38",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card38.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card38.html",
+    "correctOption": null
   },
   {
     "id": "523ffb4b-f2f7-4a97-8a38-f7f62752e51c",
@@ -126,7 +131,8 @@
     "themeTitle": "心情変化・背景説明",
     "themeTarget": "描写を根拠に登場人物の心理や経緯を自分の言葉で説明する力を問う",
     "bookId": "38",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card38.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card38.html",
+    "correctOption": null
   },
   {
     "id": "a03147cd-fe73-4758-ad6b-9c46a9eceea5",
@@ -145,7 +151,8 @@
     "themeTitle": "思考力・考察記述",
     "themeTarget": "本文の理解を踏まえて自分の言葉で考察・意見を述べる応用力を問う",
     "bookId": "51",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card51.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card51.html",
+    "correctOption": null
   },
   {
     "id": "e5617d7d-e9b2-493b-a104-1e54da761492",
@@ -164,7 +171,8 @@
     "themeTitle": "要素まとめ（短文記述）",
     "themeTarget": "本文から必要な要素を集約・整理してまとめる力を問う",
     "bookId": "51",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card51.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card51.html",
+    "correctOption": null
   },
   {
     "id": "1d5d86b8-6587-42ac-b0f8-e0a03b41d007",
@@ -183,7 +191,8 @@
     "themeTitle": "思考力・考察記述",
     "themeTarget": "本文の理解を踏まえて自分の言葉で考察・意見を述べる応用力を問う",
     "bookId": "52",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card52.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card52.html",
+    "correctOption": null
   },
   {
     "id": "d6f40e89-0191-456d-885c-647a17d1cf7d",
@@ -202,7 +211,8 @@
     "themeTitle": "要約・全体説明（長文記述）",
     "themeTarget": "論理構造を整理して論理的に構成する総合的な要約力を問う",
     "bookId": "52",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card52.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card52.html",
+    "correctOption": null
   },
   {
     "id": "ac963912-ab7f-4e48-860a-5c5c90ea46d5",
@@ -226,7 +236,8 @@
     "themeTitle": "要素まとめ（短文記述）",
     "themeTarget": "本文から必要な要素を集約・整理してまとめる力を問う",
     "bookId": "52",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card52.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card52.html",
+    "correctOption": null
   },
   {
     "id": "282efd03-bfbe-416c-9df4-794861e5e5ca",
@@ -245,7 +256,8 @@
     "themeTitle": "要約・全体説明（長文記述）",
     "themeTarget": "論理構造を整理して論理的に構成する総合的な要約力を問う",
     "bookId": "53",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card53.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card53.html",
+    "correctOption": null
   },
   {
     "id": "2fa27c12-2c3b-4212-8c9b-2c24d2810734",
@@ -264,7 +276,8 @@
     "themeTitle": "要素まとめ（短文記述）",
     "themeTarget": "本文から必要な要素を集約・整理してまとめる力を問う",
     "bookId": "53",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card53.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card53.html",
+    "correctOption": null
   },
   {
     "id": "ecfaf52d-772e-4e81-be63-919a1cc5204c",
@@ -288,7 +301,8 @@
     "themeTitle": "思考力・考察記述",
     "themeTarget": "本文の理解を踏まえて自分の言葉で考察・意見を述べる応用力を問う",
     "bookId": "54",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card54.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card54.html",
+    "correctOption": null
   },
   {
     "id": "349db20f-4c49-461b-adf9-bea6743f63e4",
@@ -307,7 +321,8 @@
     "themeTitle": "心情変化・背景説明",
     "themeTarget": "描写を根拠に登場人物の心理や経緯を自分の言葉で説明する力を問う",
     "bookId": "54",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card54.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card54.html",
+    "correctOption": null
   },
   {
     "id": "27b01ee4-c9d6-4d7f-8065-2b3e35c17545",
@@ -326,7 +341,8 @@
     "themeTitle": "心情変化・背景説明",
     "themeTarget": "描写を根拠に登場人物の心理や経緯を自分の言葉で説明する力を問う",
     "bookId": "57",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card57.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card57.html",
+    "correctOption": null
   },
   {
     "id": "46f93c74-91f3-418f-8293-d2a478636100",
@@ -345,7 +361,8 @@
     "themeTitle": "要素まとめ（短文記述）",
     "themeTarget": "本文から必要な要素を集約・整理してまとめる力を問う",
     "bookId": "57",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card57.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card57.html",
+    "correctOption": null
   },
   {
     "id": "c447a45f-f391-4246-8f4c-5fa66d25f6f9",
@@ -364,7 +381,8 @@
     "themeTitle": "要素まとめ（短文記述）",
     "themeTarget": "本文から必要な要素を集約・整理してまとめる力を問う",
     "bookId": "59",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card59.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card59.html",
+    "correctOption": null
   },
   {
     "id": "55cb4652-676d-40fb-9067-7ed906ac8f21",
@@ -383,7 +401,8 @@
     "themeTitle": "思考力・考察記述",
     "themeTarget": "本文の理解を踏まえて自分の言葉で考察・意見を述べる応用力を問う",
     "bookId": "59",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card59.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card59.html",
+    "correctOption": null
   },
   {
     "id": "8dfc3992-c90b-4013-bf29-4f92cec25a9d",
@@ -402,7 +421,8 @@
     "themeTitle": "要約・全体説明（長文記述）",
     "themeTarget": "論理構造を整理して論理的に構成する総合的な要約力を問う",
     "bookId": "59",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card59.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card59.html",
+    "correctOption": null
   },
   {
     "id": "899016b8-7283-41ac-b20a-a1f7eb651b32",
@@ -421,7 +441,8 @@
     "themeTitle": "要素まとめ（短文記述）",
     "themeTarget": "本文から必要な要素を集約・整理してまとめる力を問う",
     "bookId": "87",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card87.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card87.html",
+    "correctOption": null
   },
   {
     "id": "f07ca689-c96b-4a7b-8949-79f4c9ab0951",
@@ -440,7 +461,8 @@
     "themeTitle": "思考力・考察記述",
     "themeTarget": "本文の理解を踏まえて自分の言葉で考察・意見を述べる応用力を問う",
     "bookId": "87",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card87.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card87.html",
+    "correctOption": null
   },
   {
     "id": "72d9db1a-3b2b-499d-aaab-866da510578f",
@@ -459,7 +481,8 @@
     "themeTitle": "思考力・考察記述",
     "themeTarget": "本文の理解を踏まえて自分の言葉で考察・意見を述べる応用力を問う",
     "bookId": "87",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card87.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card87.html",
+    "correctOption": null
   },
   {
     "id": "1e177f1b-4b8e-48cb-8506-419874693764",
@@ -478,7 +501,8 @@
     "themeTitle": "思考力・考察記述",
     "themeTarget": "本文の理解を踏まえて自分の言葉で考察・意見を述べる応用力を問う",
     "bookId": "88",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card88.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card88.html",
+    "correctOption": null
   },
   {
     "id": "99348bb9-d8ef-4c64-bad6-0b9b22d73d42",
@@ -497,7 +521,8 @@
     "themeTitle": "心情変化・背景説明",
     "themeTarget": "描写を根拠に登場人物の心理や経緯を自分の言葉で説明する力を問う",
     "bookId": "91",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card91.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card91.html",
+    "correctOption": null
   },
   {
     "id": "2e2446ed-ff27-480a-8850-9e8d8da9e47e",
@@ -521,7 +546,8 @@
     "themeTitle": "要約・全体説明（長文記述）",
     "themeTarget": "論理構造を整理して論理的に構成する総合的な要約力を問う",
     "bookId": "91",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card91.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card91.html",
+    "correctOption": null
   },
   {
     "id": "6d1f3105-836d-40b6-a898-96ad23929544",
@@ -540,7 +566,8 @@
     "themeTitle": "要約・全体説明（長文記述）",
     "themeTarget": "論理構造を整理して論理的に構成する総合的な要約力を問う",
     "bookId": "91",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card91.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card91.html",
+    "correctOption": null
   },
   {
     "id": "95fd1b98-3c19-4958-9d18-9953e3827d4c",
@@ -559,7 +586,8 @@
     "themeTitle": "要素まとめ（短文記述）",
     "themeTarget": "本文から必要な要素を集約・整理してまとめる力を問う",
     "bookId": "97",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card97.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card97.html",
+    "correctOption": null
   },
   {
     "id": "9bf3f767-0119-4764-9bbf-e716f962cf62",
@@ -578,7 +606,8 @@
     "themeTitle": "要素まとめ（短文記述）",
     "themeTarget": "本文から必要な要素を集約・整理してまとめる力を問う",
     "bookId": "97",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card97.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card97.html",
+    "correctOption": null
   },
   {
     "id": "21b9dbfb-8817-4f3a-ba64-2e52ea61ee6b",
@@ -597,7 +626,8 @@
     "themeTitle": "心情変化・背景説明",
     "themeTarget": "描写を根拠に登場人物の心理や経緯を自分の言葉で説明する力を問う",
     "bookId": "100",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card100.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card100.html",
+    "correctOption": null
   },
   {
     "id": "32c8c834-3865-486b-b522-2008ac594ae3",
@@ -616,7 +646,8 @@
     "themeTitle": "要約・全体説明（長文記述）",
     "themeTarget": "論理構造を整理して論理的に構成する総合的な要約力を問う",
     "bookId": "100",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card100.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card100.html",
+    "correctOption": null
   },
   {
     "id": "18bb7832-bb43-4187-b951-9a675ce48ec5",
@@ -635,7 +666,8 @@
     "themeTitle": "思考力・考察記述",
     "themeTarget": "本文の理解を踏まえて自分の言葉で考察・意見を述べる応用力を問う",
     "bookId": "101",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card101.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card101.html",
+    "correctOption": null
   },
   {
     "id": "522891b7-438a-4d3a-a5dd-0f65f8e907e9",
@@ -654,7 +686,8 @@
     "themeTitle": "要素まとめ（短文記述）",
     "themeTarget": "本文から必要な要素を集約・整理してまとめる力を問う",
     "bookId": "101",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card101.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card101.html",
+    "correctOption": null
   },
   {
     "id": "75a22dca-9a6e-4f90-9f4c-00c832609f97",
@@ -673,7 +706,8 @@
     "themeTitle": "要約・全体説明（長文記述）",
     "themeTarget": "論理構造を整理して論理的に構成する総合的な要約力を問う",
     "bookId": "101",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card101.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card101.html",
+    "correctOption": null
   },
   {
     "id": "28fcb0d8-bbcf-48bd-8c02-e8fe42878a77",
@@ -697,7 +731,8 @@
     "themeTitle": "要約・全体説明（長文記述）",
     "themeTarget": "論理構造を整理して論理的に構成する総合的な要約力を問う",
     "bookId": "101",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card101.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card101.html",
+    "correctOption": null
   },
   {
     "id": "4f0f4000-c1ed-4468-8c2a-832f5a39be57",
@@ -716,7 +751,8 @@
     "themeTitle": "要素まとめ（短文記述）",
     "themeTarget": "本文から必要な要素を集約・整理してまとめる力を問う",
     "bookId": "102",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card102.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card102.html",
+    "correctOption": null
   },
   {
     "id": "dbc35a2e-b94e-40e8-8662-ea9d6f7e15bd",
@@ -735,7 +771,8 @@
     "themeTitle": "要約・全体説明（長文記述）",
     "themeTarget": "論理構造を整理して論理的に構成する総合的な要約力を問う",
     "bookId": "103",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card103.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card103.html",
+    "correctOption": null
   },
   {
     "id": "210a1b50-ab84-4bd6-815d-9c8d6ed3089a",
@@ -754,7 +791,8 @@
     "themeTitle": "思考力・考察記述",
     "themeTarget": "本文の理解を踏まえて自分の言葉で考察・意見を述べる応用力を問う",
     "bookId": "103",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card103.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card103.html",
+    "correctOption": null
   },
   {
     "id": "a908b8c5-5a1d-4c15-9598-f5b13ade6038",
@@ -773,7 +811,8 @@
     "themeTitle": "心情変化・背景説明",
     "themeTarget": "描写を根拠に登場人物の心理や経緯を自分の言葉で説明する力を問う",
     "bookId": "106",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card106.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card106.html",
+    "correctOption": null
   },
   {
     "id": "23c5cd3c-4f1b-40d3-bb74-03b612220cc9",
@@ -792,7 +831,8 @@
     "themeTitle": "心情変化・背景説明",
     "themeTarget": "描写を根拠に登場人物の心理や経緯を自分の言葉で説明する力を問う",
     "bookId": "106",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card106.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card106.html",
+    "correctOption": null
   },
   {
     "id": "f57176a3-7cc7-4ee2-b6da-de9e470365b7",
@@ -811,7 +851,8 @@
     "themeTitle": "要約・全体説明（長文記述）",
     "themeTarget": "論理構造を整理して論理的に構成する総合的な要約力を問う",
     "bookId": "109",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card109.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card109.html",
+    "correctOption": null
   },
   {
     "id": "bbd951f1-4890-4b4b-a7a3-b3df0f82e44a",
@@ -835,7 +876,8 @@
     "themeTitle": "心情変化・背景説明",
     "themeTarget": "描写を根拠に登場人物の心理や経緯を自分の言葉で説明する力を問う",
     "bookId": "114",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card114.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card114.html",
+    "correctOption": null
   },
   {
     "id": "2a57d8c9-9d64-4f99-80c2-570fd2bc049f",
@@ -854,7 +896,8 @@
     "themeTitle": "要約・全体説明（長文記述）",
     "themeTarget": "論理構造を整理して論理的に構成する総合的な要約力を問う",
     "bookId": "116",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card116.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card116.html",
+    "correctOption": null
   },
   {
     "id": "9066df66-43fc-4c90-b480-7465a27b7e43",
@@ -873,7 +916,8 @@
     "themeTitle": "思考力・考察記述",
     "themeTarget": "本文の理解を踏まえて自分の言葉で考察・意見を述べる応用力を問う",
     "bookId": "116",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card116.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card116.html",
+    "correctOption": null
   },
   {
     "id": "328f19bb-b807-433e-9347-c3bc19b81455",
@@ -892,7 +936,8 @@
     "themeTitle": "要約・全体説明（長文記述）",
     "themeTarget": "論理構造を整理して論理的に構成する総合的な要約力を問う",
     "bookId": "119",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card119.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card119.html",
+    "correctOption": null
   },
   {
     "id": "8a5ebf90-84a9-48b6-abaa-8937b47cba38",
@@ -911,7 +956,8 @@
     "themeTitle": "心情変化・背景説明",
     "themeTarget": "描写を根拠に登場人物の心理や経緯を自分の言葉で説明する力を問う",
     "bookId": "119",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card119.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card119.html",
+    "correctOption": null
   },
   {
     "id": "7cd999dc-51f5-4e46-9023-abd32f48661c",
@@ -935,7 +981,8 @@
     "themeTitle": "思考力・考察記述",
     "themeTarget": "本文の理解を踏まえて自分の言葉で考察・意見を述べる応用力を問う",
     "bookId": "120",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card120.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card120.html",
+    "correctOption": null
   },
   {
     "id": "ab7efb54-caf2-48fd-94f2-c8101b9e4e17",
@@ -954,7 +1001,8 @@
     "themeTitle": "要約・全体説明（長文記述）",
     "themeTarget": "論理構造を整理して論理的に構成する総合的な要約力を問う",
     "bookId": "121",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card121.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card121.html",
+    "correctOption": null
   },
   {
     "id": "241f36c9-f9f2-4a07-a50d-6307d1538339",
@@ -973,7 +1021,8 @@
     "themeTitle": "思考力・考察記述",
     "themeTarget": "本文の理解を踏まえて自分の言葉で考察・意見を述べる応用力を問う",
     "bookId": "121",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card121.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card121.html",
+    "correctOption": null
   },
   {
     "id": "1c4a55d4-3ca7-415a-be70-2b19ad858318",
@@ -992,7 +1041,8 @@
     "themeTitle": "心情変化・背景説明",
     "themeTarget": "描写を根拠に登場人物の心理や経緯を自分の言葉で説明する力を問う",
     "bookId": "121",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card121.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card121.html",
+    "correctOption": null
   },
   {
     "id": "f4480050-3adc-4218-b7ea-90aa7c7c6f9e",
@@ -1011,7 +1061,8 @@
     "themeTitle": "要約・全体説明（長文記述）",
     "themeTarget": "論理構造を整理して論理的に構成する総合的な要約力を問う",
     "bookId": "122",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card122.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card122.html",
+    "correctOption": null
   },
   {
     "id": "3bf9f33b-466f-4275-9658-442fb5dd850e",
@@ -1035,7 +1086,8 @@
     "themeTitle": "要約・全体説明（長文記述）",
     "themeTarget": "論理構造を整理して論理的に構成する総合的な要約力を問う",
     "bookId": "122",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card122.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card122.html",
+    "correctOption": null
   },
   {
     "id": "0ad1b2f5-0fdb-4c8d-bed2-909fba7bca5a",
@@ -1054,7 +1106,8 @@
     "themeTitle": "要約・全体説明（長文記述）",
     "themeTarget": "論理構造を整理して論理的に構成する総合的な要約力を問う",
     "bookId": "122",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card122.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card122.html",
+    "correctOption": null
   },
   {
     "id": "773fb14d-f263-42d8-b76f-17aae13e374a",
@@ -1073,7 +1126,8 @@
     "themeTitle": "要約・全体説明（長文記述）",
     "themeTarget": "論理構造を整理して論理的に構成する総合的な要約力を問う",
     "bookId": "124",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card124.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card124.html",
+    "correctOption": null
   },
   {
     "id": "e60e7538-ff95-421e-a413-5ae257d8b91b",
@@ -1092,7 +1146,8 @@
     "themeTitle": "要素まとめ（短文記述）",
     "themeTarget": "本文から必要な要素を集約・整理してまとめる力を問う",
     "bookId": "124",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card124.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card124.html",
+    "correctOption": null
   },
   {
     "id": "281266a9-2d5b-4651-b60a-4e40f9899c43",
@@ -1111,7 +1166,8 @@
     "themeTitle": "心情変化・背景説明",
     "themeTarget": "描写を根拠に登場人物の心理や経緯を自分の言葉で説明する力を問う",
     "bookId": "124",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card124.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card124.html",
+    "correctOption": null
   },
   {
     "id": "d95deaff-a3df-479b-878b-98e8afe701ad",
@@ -1130,7 +1186,8 @@
     "themeTitle": "心情変化・背景説明",
     "themeTarget": "描写を根拠に登場人物の心理や経緯を自分の言葉で説明する力を問う",
     "bookId": "124",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card124.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card124.html",
+    "correctOption": null
   },
   {
     "id": "5f1da821-fb91-49e2-b521-f39bec9b6b2d",
@@ -1149,7 +1206,8 @@
     "themeTitle": "要素まとめ（短文記述）",
     "themeTarget": "本文から必要な要素を集約・整理してまとめる力を問う",
     "bookId": "124",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card124.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card124.html",
+    "correctOption": null
   },
   {
     "id": "fdb37613-b932-4d52-a32c-8b712a02aaee",
@@ -1168,7 +1226,8 @@
     "themeTitle": "心情変化・背景説明",
     "themeTarget": "描写を根拠に登場人物の心理や経緯を自分の言葉で説明する力を問う",
     "bookId": "124",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card124.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card124.html",
+    "correctOption": null
   },
   {
     "id": "828ce77f-8a89-41d0-a1ad-8bc49a7e24c6",
@@ -1187,7 +1246,8 @@
     "themeTitle": "思考力・考察記述",
     "themeTarget": "本文の理解を踏まえて自分の言葉で考察・意見を述べる応用力を問う",
     "bookId": "124",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card124.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card124.html",
+    "correctOption": null
   },
   {
     "id": "954217d3-68c0-4583-97c9-4c9cbab120ae",
@@ -1206,7 +1266,8 @@
     "themeTitle": "心情変化・背景説明",
     "themeTarget": "描写を根拠に登場人物の心理や経緯を自分の言葉で説明する力を問う",
     "bookId": "125",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card125.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card125.html",
+    "correctOption": null
   },
   {
     "id": "893e3759-09d5-4465-a8ce-1b5bc5b61e93",
@@ -1225,7 +1286,8 @@
     "themeTitle": "要素まとめ（短文記述）",
     "themeTarget": "本文から必要な要素を集約・整理してまとめる力を問う",
     "bookId": "127",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card127.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card127.html",
+    "correctOption": null
   },
   {
     "id": "ab1f2f6c-bc83-4421-af5a-af41c87c6882",
@@ -1244,7 +1306,8 @@
     "themeTitle": "要素まとめ（短文記述）",
     "themeTarget": "本文から必要な要素を集約・整理してまとめる力を問う",
     "bookId": "129",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card129.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card129.html",
+    "correctOption": null
   },
   {
     "id": "1a2eae3e-b954-4037-9f45-393372b27f84",
@@ -1263,7 +1326,8 @@
     "themeTitle": "要素まとめ（短文記述）",
     "themeTarget": "本文から必要な要素を集約・整理してまとめる力を問う",
     "bookId": "129",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card129.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card129.html",
+    "correctOption": null
   },
   {
     "id": "18a4e204-1850-4db8-b709-1c5d6cf99b9c",
@@ -1282,7 +1346,8 @@
     "themeTitle": "要素まとめ（短文記述）",
     "themeTarget": "本文から必要な要素を集約・整理してまとめる力を問う",
     "bookId": "131",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card131.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card131.html",
+    "correctOption": null
   },
   {
     "id": "3e144bff-25ca-4769-8100-d6d8d53b4790",
@@ -1306,7 +1371,8 @@
     "themeTitle": "思考力・考察記述",
     "themeTarget": "本文の理解を踏まえて自分の言葉で考察・意見を述べる応用力を問う",
     "bookId": "132",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card132.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card132.html",
+    "correctOption": null
   },
   {
     "id": "25cf26c4-c5d1-4842-9b4f-4a87cb044714",
@@ -1325,7 +1391,8 @@
     "themeTitle": "思考力・考察記述",
     "themeTarget": "本文の理解を踏まえて自分の言葉で考察・意見を述べる応用力を問う",
     "bookId": "132",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card132.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card132.html",
+    "correctOption": null
   },
   {
     "id": "f8acca8c-f418-4024-aa7e-ff297a540406",
@@ -1344,7 +1411,8 @@
     "themeTitle": "心情変化・背景説明",
     "themeTarget": "描写を根拠に登場人物の心理や経緯を自分の言葉で説明する力を問う",
     "bookId": "132",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card132.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card132.html",
+    "correctOption": null
   },
   {
     "id": "043beec1-259a-40a4-b0d6-4ff956c879da",
@@ -1363,7 +1431,8 @@
     "themeTitle": "要素まとめ（短文記述）",
     "themeTarget": "本文から必要な要素を集約・整理してまとめる力を問う",
     "bookId": "132",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card132.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card132.html",
+    "correctOption": null
   },
   {
     "id": "b222a811-21d2-49d5-8a39-52a946b2975b",
@@ -1382,7 +1451,8 @@
     "themeTitle": "要約・全体説明（長文記述）",
     "themeTarget": "論理構造を整理して論理的に構成する総合的な要約力を問う",
     "bookId": "132",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card132.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card132.html",
+    "correctOption": null
   },
   {
     "id": "3218e34c-6c5e-4245-b9b3-033a1a0e66cd",
@@ -1401,7 +1471,8 @@
     "themeTitle": "要約・全体説明（長文記述）",
     "themeTarget": "論理構造を整理して論理的に構成する総合的な要約力を問う",
     "bookId": "132",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card132.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card132.html",
+    "correctOption": null
   },
   {
     "id": "500c3366-e856-4dd9-b4ab-0f2d0f51bf16",
@@ -1425,7 +1496,8 @@
     "themeTitle": "心情変化・背景説明",
     "themeTarget": "描写を根拠に登場人物の心理や経緯を自分の言葉で説明する力を問う",
     "bookId": "132",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card132.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card132.html",
+    "correctOption": null
   },
   {
     "id": "aa6b8f94-4e67-4ff5-8cc7-37fa082b75d5",
@@ -1444,7 +1516,8 @@
     "themeTitle": "心情変化・背景説明",
     "themeTarget": "描写を根拠に登場人物の心理や経緯を自分の言葉で説明する力を問う",
     "bookId": "132",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card132.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card132.html",
+    "correctOption": null
   },
   {
     "id": "35c398a7-e37b-4176-b59c-8404d9081a73",
@@ -1463,7 +1536,8 @@
     "themeTitle": "要素まとめ（短文記述）",
     "themeTarget": "本文から必要な要素を集約・整理してまとめる力を問う",
     "bookId": "132",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card132.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card132.html",
+    "correctOption": null
   },
   {
     "id": "e7be12da-60a5-401d-9854-58ca74c1c9f3",
@@ -1482,7 +1556,8 @@
     "themeTitle": "心情変化・背景説明",
     "themeTarget": "描写を根拠に登場人物の心理や経緯を自分の言葉で説明する力を問う",
     "bookId": "132",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card132.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card132.html",
+    "correctOption": null
   },
   {
     "id": "da69d797-3b30-43d2-b2af-e94bf0c14d1b",
@@ -1501,7 +1576,8 @@
     "themeTitle": "思考力・考察記述",
     "themeTarget": "本文の理解を踏まえて自分の言葉で考察・意見を述べる応用力を問う",
     "bookId": "132",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card132.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card132.html",
+    "correctOption": null
   },
   {
     "id": "98983ec7-bdcc-4da3-8be8-6579e01a6934",
@@ -1520,7 +1596,8 @@
     "themeTitle": "心情変化・背景説明",
     "themeTarget": "描写を根拠に登場人物の心理や経緯を自分の言葉で説明する力を問う",
     "bookId": "132",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card132.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card132.html",
+    "correctOption": null
   },
   {
     "id": "c769957f-1440-40f6-a6f7-fa48eb02b2c2",
@@ -1539,7 +1616,8 @@
     "themeTitle": "心情変化・背景説明",
     "themeTarget": "描写を根拠に登場人物の心理や経緯を自分の言葉で説明する力を問う",
     "bookId": "133",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card133.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card133.html",
+    "correctOption": null
   },
   {
     "id": "e13f8186-debe-49f1-aea2-e153264956e1",
@@ -1558,7 +1636,8 @@
     "themeTitle": "心情変化・背景説明",
     "themeTarget": "描写を根拠に登場人物の心理や経緯を自分の言葉で説明する力を問う",
     "bookId": "133",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card133.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card133.html",
+    "correctOption": null
   },
   {
     "id": "42ff6f7b-514a-4337-84d2-876cd8b648d1",
@@ -1582,7 +1661,8 @@
     "themeTitle": "思考力・考察記述",
     "themeTarget": "本文の理解を踏まえて自分の言葉で考察・意見を述べる応用力を問う",
     "bookId": "134",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card134.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card134.html",
+    "correctOption": null
   },
   {
     "id": "5fca7c63-9c0b-407a-9957-481851301e59",
@@ -1601,7 +1681,8 @@
     "themeTitle": "要素まとめ（短文記述）",
     "themeTarget": "本文から必要な要素を集約・整理してまとめる力を問う",
     "bookId": "134",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card134.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card134.html",
+    "correctOption": null
   },
   {
     "id": "2a851719-92d4-4e5d-bd5a-72ce752cd659",
@@ -1620,7 +1701,8 @@
     "themeTitle": "要約・全体説明（長文記述）",
     "themeTarget": "論理構造を整理して論理的に構成する総合的な要約力を問う",
     "bookId": "134",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card134.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card134.html",
+    "correctOption": null
   },
   {
     "id": "9d605fdb-8eef-40d8-b285-2dcf93f8249d",
@@ -1639,7 +1721,8 @@
     "themeTitle": "心情変化・背景説明",
     "themeTarget": "描写を根拠に登場人物の心理や経緯を自分の言葉で説明する力を問う",
     "bookId": "136",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card136.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card136.html",
+    "correctOption": null
   },
   {
     "id": "b98d4d3f-9c90-47d4-b1e1-78fbd423cda7",
@@ -1658,7 +1741,8 @@
     "themeTitle": "心情変化・背景説明",
     "themeTarget": "描写を根拠に登場人物の心理や経緯を自分の言葉で説明する力を問う",
     "bookId": "136",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card136.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card136.html",
+    "correctOption": null
   },
   {
     "id": "4e554053-b432-4d43-8cf5-8f806bb03827",
@@ -1677,7 +1761,8 @@
     "themeTitle": "要素まとめ（短文記述）",
     "themeTarget": "本文から必要な要素を集約・整理してまとめる力を問う",
     "bookId": "136",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card136.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card136.html",
+    "correctOption": null
   },
   {
     "id": "8fa87a1e-7393-4108-a093-8b26e39bb1e6",
@@ -1696,7 +1781,8 @@
     "themeTitle": "要約・全体説明（長文記述）",
     "themeTarget": "論理構造を整理して論理的に構成する総合的な要約力を問う",
     "bookId": "136",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card136.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card136.html",
+    "correctOption": null
   },
   {
     "id": "0882efd7-f6b9-4534-a7ed-b0c03ad97d6d",
@@ -1720,7 +1806,8 @@
     "themeTitle": "要素まとめ（短文記述）",
     "themeTarget": "本文から必要な要素を集約・整理してまとめる力を問う",
     "bookId": "137",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card137.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card137.html",
+    "correctOption": null
   },
   {
     "id": "5b2b97a1-217b-4a14-b6c2-937df24f90be",
@@ -1739,7 +1826,8 @@
     "themeTitle": "思考力・考察記述",
     "themeTarget": "本文の理解を踏まえて自分の言葉で考察・意見を述べる応用力を問う",
     "bookId": "137",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card137.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card137.html",
+    "correctOption": null
   },
   {
     "id": "bf662441-e0da-4eaf-90f3-b402445769e8",
@@ -1758,7 +1846,8 @@
     "themeTitle": "心情変化・背景説明",
     "themeTarget": "描写を根拠に登場人物の心理や経緯を自分の言葉で説明する力を問う",
     "bookId": "138",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card138.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card138.html",
+    "correctOption": null
   },
   {
     "id": "2047583b-e085-4a73-b6d2-7e9a843461ef",
@@ -1777,7 +1866,8 @@
     "themeTitle": "要約・全体説明（長文記述）",
     "themeTarget": "論理構造を整理して論理的に構成する総合的な要約力を問う",
     "bookId": "138",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card138.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card138.html",
+    "correctOption": null
   },
   {
     "id": "9b637941-f68c-4684-a92d-fbbbcd66f08b",
@@ -1796,7 +1886,8 @@
     "themeTitle": "要素まとめ（短文記述）",
     "themeTarget": "本文から必要な要素を集約・整理してまとめる力を問う",
     "bookId": "143",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card143.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card143.html",
+    "correctOption": null
   },
   {
     "id": "3a27f871-57e8-401e-9319-6e3e5f19bf34",
@@ -1815,7 +1906,8 @@
     "themeTitle": "心情変化・背景説明",
     "themeTarget": "描写を根拠に登場人物の心理や経緯を自分の言葉で説明する力を問う",
     "bookId": "143",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card143.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card143.html",
+    "correctOption": null
   },
   {
     "id": "f564bf66-f14b-4a24-9fbc-72db8cf7843f",
@@ -1839,7 +1931,8 @@
     "themeTitle": "心情変化・背景説明",
     "themeTarget": "描写を根拠に登場人物の心理や経緯を自分の言葉で説明する力を問う",
     "bookId": "144",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card144.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card144.html",
+    "correctOption": null
   },
   {
     "id": "acb26617-ee56-4556-b454-47bf1b5016ae",
@@ -1863,7 +1956,8 @@
     "themeTitle": "要素まとめ（短文記述）",
     "themeTarget": "本文から必要な要素を集約・整理してまとめる力を問う",
     "bookId": "144",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card144.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card144.html",
+    "correctOption": null
   },
   {
     "id": "9c552b83-a932-49d8-88d7-3567a9a6db87",
@@ -1882,7 +1976,8 @@
     "themeTitle": "心情変化・背景説明",
     "themeTarget": "描写を根拠に登場人物の心理や経緯を自分の言葉で説明する力を問う",
     "bookId": "147",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card147.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card147.html",
+    "correctOption": null
   },
   {
     "id": "91289579-d296-41a6-a1fb-c34ffb683ade",
@@ -1906,7 +2001,8 @@
     "themeTitle": "要約・全体説明（長文記述）",
     "themeTarget": "論理構造を整理して論理的に構成する総合的な要約力を問う",
     "bookId": "147",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card147.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card147.html",
+    "correctOption": null
   },
   {
     "id": "b118cdec-9843-4947-9726-e74826957ebc",
@@ -1925,7 +2021,8 @@
     "themeTitle": "要約・全体説明（長文記述）",
     "themeTarget": "論理構造を整理して論理的に構成する総合的な要約力を問う",
     "bookId": "152",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card152.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card152.html",
+    "correctOption": null
   },
   {
     "id": "1628e7b3-0753-4597-a881-b6024fcd2153",
@@ -1949,7 +2046,8 @@
     "themeTitle": "要約・全体説明（長文記述）",
     "themeTarget": "論理構造を整理して論理的に構成する総合的な要約力を問う",
     "bookId": "152",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card152.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card152.html",
+    "correctOption": null
   },
   {
     "id": "38cf3ce9-7e15-4692-bb11-53f44d4dda95",
@@ -1968,7 +2066,8 @@
     "themeTitle": "要約・全体説明（長文記述）",
     "themeTarget": "論理構造を整理して論理的に構成する総合的な要約力を問う",
     "bookId": "153",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card153.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card153.html",
+    "correctOption": null
   },
   {
     "id": "b56f2506-204e-4223-90d1-8097ee06e429",
@@ -1992,6 +2091,7 @@
     "themeTitle": "心情変化・背景説明",
     "themeTarget": "描写を根拠に登場人物の心理や経緯を自分の言葉で説明する力を問う",
     "bookId": "153",
-    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card153.html"
+    "cardUrl": "https://www.aozora.gr.jp/cards/000879/card153.html",
+    "correctOption": null
   }
 ]

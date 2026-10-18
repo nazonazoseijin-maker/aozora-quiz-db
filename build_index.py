@@ -27,6 +27,29 @@ GENRE_DIR_MAP = {
     "評論": "essay"
 }
 
+def normalize_quiz_item(q: dict) -> dict:
+    """Kotlin Serialization(QuizData)に適合するよう型構造を正規化"""
+    if not isinstance(q, dict):
+        return q
+    co = q.get("correctOption")
+    if isinstance(co, str):
+        q["correctOption"] = {"text": co, "reason": ""}
+    elif not isinstance(co, dict):
+        q["correctOption"] = None
+
+    wo = q.get("wrongOptions")
+    if isinstance(wo, list):
+        normalized_wo = []
+        for item in wo:
+            if isinstance(item, str):
+                normalized_wo.append({"text": item, "reason": ""})
+            elif isinstance(item, dict):
+                normalized_wo.append(item)
+        q["wrongOptions"] = normalized_wo
+
+    return q
+
+
 def pack_quizzes(output_dir: str = "./quiz_output", pack_size: int = 100):
     """ディレクトリ内のデータを100問ずつの pack_XXX.json にパケット化し、index.json を作成"""
     index_manifest = {"categories": {}}
@@ -58,8 +81,11 @@ def pack_quizzes(output_dir: str = "./quiz_output", pack_size: int = 100):
                 print(f" [スキップ] データが空です: {raw_file}")
                 continue
 
-            choice_quizzes = [q for q in all_quizzes if isinstance(q, dict) and q.get("quizType") != "ESSAY"]
-            essay_quizzes = [q for q in all_quizzes if isinstance(q, dict) and q.get("quizType") == "ESSAY"]
+            # 型構造の自動正規化
+            all_quizzes = [normalize_quiz_item(q) for q in all_quizzes if isinstance(q, dict)]
+
+            choice_quizzes = [q for q in all_quizzes if q.get("quizType") != "ESSAY"]
+            essay_quizzes = [q for q in all_quizzes if q.get("quizType") == "ESSAY"]
 
             choice_packs_info = []
             for i in range(0, len(choice_quizzes), pack_size):

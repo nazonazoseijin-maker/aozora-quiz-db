@@ -718,7 +718,7 @@ def worker_thread(action: str, config: dict):
     category = config.get("category", "")
     quiz_type = config.get("quizType", "auto")
     choice_ratio = config.get("choiceRatio", "70")
-    count = config.get("count", "50")
+    count = config.get("count", "100")
     passage_length_hs = config.get("passageLengthHighschool", "800")
     passage_length_ct = config.get("passageLengthCommonTest", "1200")
     passage_length_du = config.get("passageLengthDifficultUniv", "1500")
@@ -726,71 +726,82 @@ def worker_thread(action: str, config: dict):
     option_count = config.get("optionCount", "4")
     interval = config.get("interval", "10")
 
+    cycle_count = 1
+
     try:
-        if action in ["generate", "run_all"]:
-            append_log(f"\n==========================================")
-            append_log(f" 🚀 ① 問題生成スクリプトを開始します")
-            append_log(f"==========================================")
-            cmd = [
-                sys.executable, "-u", "generate_quizzes.py",
-                f"--api_key={api_key}",
-                f"--refine_api_key={refine_api_key}",
-                f"--local_text_dir={local_text_dir}",
-                f"--count_per_category={count}",
-                f"--interval={interval}",
-                f"--quiz_type={quiz_type}",
-                f"--choice_ratio={choice_ratio}",
-                f"--passage_length_highschool={passage_length_hs}",
-                f"--passage_length_common_test={passage_length_ct}",
-                f"--passage_length_difficult_univ={passage_length_du}",
-                f"--chars_per_quiz={chars_per_quiz}",
-                f"--option_count={option_count}"
-            ]
-            if category:
-                cmd.append(f"--category={category}")
+        while IS_RUNNING:
+            if action in ["generate", "run_all"]:
+                append_log(f"\n==========================================")
+                append_log(f" 🚀 ① 問題生成スクリプトを開始します (サイクル #{cycle_count})")
+                append_log(f"==========================================")
+                cmd = [
+                    sys.executable, "-u", "generate_quizzes.py",
+                    f"--api_key={api_key}",
+                    f"--refine_api_key={refine_api_key}",
+                    f"--local_text_dir={local_text_dir}",
+                    f"--count_per_category={count}",
+                    f"--interval={interval}",
+                    f"--quiz_type={quiz_type}",
+                    f"--choice_ratio={choice_ratio}",
+                    f"--passage_length_highschool={passage_length_hs}",
+                    f"--passage_length_common_test={passage_length_ct}",
+                    f"--passage_length_difficult_univ={passage_length_du}",
+                    f"--chars_per_quiz={chars_per_quiz}",
+                    f"--option_count={option_count}"
+                ]
+                if category:
+                    cmd.append(f"--category={category}")
 
-            code = run_command_stream(cmd, cwd=TOOLS_DIR)
-            if code != 0:
-                append_log(f"[Warn] 問題生成がコード {code} で終了しました。")
+                code = run_command_stream(cmd, cwd=TOOLS_DIR)
+                if code != 0:
+                    append_log(f"[Warn] 問題生成がコード {code} で終了しました。")
 
-        if action == "refine":
-            refine_api_key = config.get("refineApiKey", "").strip() or api_key
-            append_log(f"\n==========================================")
-            append_log(f" ✨ 全問題の現代語訳ブラッシュアップ＆誤り訂正を開始します")
-            append_log(f"==========================================")
-            cmd = [
-                sys.executable, "-u", "refine_quizzes.py",
-                f"--api_key={refine_api_key}",
-                f"--interval={interval}"
-            ]
-            run_command_stream(cmd, cwd=TOOLS_DIR)
+            if action == "refine":
+                refine_api_key = config.get("refineApiKey", "").strip() or api_key
+                append_log(f"\n==========================================")
+                append_log(f" ✨ 全問題の現代語訳ブラッシュアップ＆誤り訂正を開始します")
+                append_log(f"==========================================")
+                cmd = [
+                    sys.executable, "-u", "refine_quizzes.py",
+                    f"--api_key={refine_api_key}",
+                    f"--interval={interval}"
+                ]
+                run_command_stream(cmd, cwd=TOOLS_DIR)
 
-        if action in ["build_index", "run_all"]:
-            append_log(f"\n==========================================")
-            append_log(f" 📦 ② index.json およびパケット構築を開始します")
-            append_log(f"==========================================")
-            cmd = [sys.executable, "-u", "build_index.py"]
-            run_command_stream(cmd, cwd=TOOLS_DIR)
+            if action in ["build_index", "run_all"]:
+                append_log(f"\n==========================================")
+                append_log(f" 📦 ② index.json およびパケット構築を開始します")
+                append_log(f"==========================================")
+                cmd = [sys.executable, "-u", "build_index.py"]
+                run_command_stream(cmd, cwd=TOOLS_DIR)
 
-        if action in ["push", "run_all"]:
-            append_log(f"\n==========================================")
-            append_log(f" ☁️ ③ GitHub への同期 (Push) を開始します")
-            append_log(f"==========================================")
+            if action in ["push", "run_all"]:
+                append_log(f"\n==========================================")
+                append_log(f" ☁️ ③ GitHub への同期 (Push) を開始します")
+                append_log(f"==========================================")
 
-            run_command_stream(["git", "add", "-A"], cwd=TOOLS_DIR)
-            run_command_stream(["git", "commit", "-m", "WebGUIからの自動データ更新"], cwd=TOOLS_DIR)
-            code = run_command_stream(["git", "push", "-u", "origin", "main"], cwd=TOOLS_DIR)
+                run_command_stream(["git", "add", "-A"], cwd=TOOLS_DIR)
+                run_command_stream(["git", "commit", "-m", f"自動更新データ (サイクル #{cycle_count})"], cwd=TOOLS_DIR)
+                code = run_command_stream(["git", "push", "-u", "origin", "main"], cwd=TOOLS_DIR)
 
-            if code != 0:
-                append_log("   -> 通常Push失敗のため、強制Push (--force) を試みます...")
-                run_command_stream(["git", "push", "-u", "origin", "main", "--force"], cwd=TOOLS_DIR)
+                if code != 0:
+                    append_log("   -> 通常Push失敗のため、強制Push (--force) を試みます...")
+                    run_command_stream(["git", "push", "-u", "origin", "main", "--force"], cwd=TOOLS_DIR)
 
-            append_log(f"\n✨ 【成功】すべての作業が正常に完了いたしました！")
+                append_log(f"\n✨ 【成功】サイクル #{cycle_count} の作業＆GitHub同期が完了いたしました！")
+
+            if action != "run_all":
+                break
+
+            cycle_count += 1
+            append_log(f"\n🔄 429エラーが発生するまで自動継続します。次の新規作成サイクル (#{cycle_count}) へ移行中...\n")
+            time.sleep(3)
 
     except Exception as e:
         append_log(f"[Error] 作業スレッド例外: {e}")
     finally:
         IS_RUNNING = False
+
 
 
 def get_quiz_stats() -> dict:
