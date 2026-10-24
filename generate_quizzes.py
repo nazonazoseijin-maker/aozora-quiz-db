@@ -791,10 +791,6 @@ def main():
                 continue
 
             existing_questions = {q.get("question", "") for q in existing_quizzes if isinstance(q, dict)}
-            processed_book_ids = {
-                str(q.get("bookId")) for q in existing_quizzes
-                if isinstance(q, dict) and q.get("bookId")
-            }
 
             # レベルごとの本文目標文字数を決定
             if level == "高校入試レベル":
@@ -806,15 +802,18 @@ def main():
             else:
                 effective_passage_length = args.passage_length
 
-            # 作品IDの若い順（昇順）に未作成の作品から順次選定
-            for book in candidate_books:
-                if session_new_count >= target_new_total:
-                    break
+            # 毎回多様な場面から作成できるよう候補作品をランダムシャッフル
+            candidate_pool = list(candidate_books)
+            random.shuffle(candidate_pool)
 
+            # 作品リストを無限にループ巡回
+            book_idx = 0
+            while session_new_count < target_new_total and candidate_pool:
+                book = candidate_pool[book_idx % len(candidate_pool)]
+                book_idx += 1
                 book_id_str = str(book.book_id)
 
-                # 既に過去に問題作成済み、または一度でもスキップされた作品は二度と読み込まない
-                if book_id_str in processed_book_ids or book_id_str in globally_skipped_book_ids:
+                if book_id_str in globally_skipped_book_ids:
                     continue
 
                 clean_text = load_text_from_file_or_download(args.local_text_dir, book)
@@ -828,6 +827,7 @@ def main():
                 print(f" 📖 作品選択(ID: {book.book_id}): 『{book.title}』（{book.author}） - {text_length}字 ➔ 最大{num_questions}問作成 (目標文字数: {effective_passage_length}字)")
 
                 for q_idx in range(num_questions):
+
                     if session_new_count >= target_new_total:
                         break
 
