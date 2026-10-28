@@ -12,7 +12,7 @@ import time
 import subprocess
 import threading
 import webbrowser
-from http.server import HTTPServer, BaseHTTPRequestHandler
+from http.server import HTTPServer, BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs, urlparse
 
 # 単体校正用のモジュールインポート
@@ -1032,7 +1032,7 @@ def main():
 
     threading.Thread(target=open_browser, daemon=True).start()
 
-    server = HTTPServer(("localhost", PORT), AppRequestHandler)
+    server = ThreadingHTTPServer(("0.0.0.0", PORT), AppRequestHandler)
     try:
         server.serve_forever()
     except KeyboardInterrupt:

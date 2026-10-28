@@ -862,7 +862,6 @@ def main():
 
                         existing_quizzes.append(quiz)
                         existing_questions.add(quiz.get("question", ""))
-                        processed_book_ids.add(str(book.book_id))
                         session_new_count += 1
                         if quiz.get("quizType") == "ESSAY":
                             session_essay_count += 1
