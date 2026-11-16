@@ -3,7 +3,7 @@
     "highschool/novel": {
       "level": "高校入試レベル",
       "genre": "小説",
-      "total_count": 2316,
+      "total_count": 2336,
       "packs": [
         {
           "pack_name": "pack_001.json",
@@ -91,7 +91,7 @@
         },
         {
           "pack_name": "pack_022.json",
-          "count": 66
+          "count": 86
         }
       ],
       "choice_packs": [
@@ -181,7 +181,7 @@
         },
         {
           "pack_name": "pack_022.json",
-          "count": 66
+          "count": 86
         }
       ],
       "essay_packs": [
@@ -198,7 +198,7 @@
     "highschool/essay": {
       "level": "高校入試レベル",
       "genre": "評論",
-      "total_count": 2185,
+      "total_count": 2205,
       "packs": [
         {
           "pack_name": "pack_001.json",
@@ -282,7 +282,7 @@
         },
         {
           "pack_name": "pack_021.json",
-          "count": 5
+          "count": 25
         }
       ],
       "choice_packs": [
@@ -368,7 +368,7 @@
         },
         {
           "pack_name": "pack_021.json",
-          "count": 5
+          "count": 25
         }
       ],
       "essay_packs": [
@@ -385,7 +385,7 @@
     "common_test/novel": {
       "level": "共通テストレベル",
       "genre": "小説",
-      "total_count": 1932,
+      "total_count": 1952,
       "packs": [
         {
           "pack_name": "pack_001.json",
@@ -457,7 +457,7 @@
         },
         {
           "pack_name": "pack_018.json",
-          "count": 52
+          "count": 72
         }
       ],
       "choice_packs": [
@@ -531,7 +531,7 @@
         },
         {
           "pack_name": "pack_018.json",
-          "count": 52
+          "count": 72
         }
       ],
       "essay_packs": [
@@ -548,7 +548,7 @@
     "common_test/essay": {
       "level": "共通テストレベル",
       "genre": "評論",
-      "total_count": 1911,
+      "total_count": 1931,
       "packs": [
         {
           "pack_name": "pack_001.json",
@@ -620,7 +620,7 @@
         },
         {
           "pack_name": "pack_018.json",
-          "count": 31
+          "count": 51
         }
       ],
       "choice_packs": [
@@ -694,7 +694,7 @@
         },
         {
           "pack_name": "pack_018.json",
-          "count": 31
+          "count": 51
         }
       ],
       "essay_packs": [
@@ -711,7 +711,7 @@
     "difficult_univ/novel": {
       "level": "難関大学レベル",
       "genre": "小説",
-      "total_count": 1895,
+      "total_count": 1915,
       "packs": [
         {
           "pack_name": "pack_001.json",
@@ -783,7 +783,7 @@
         },
         {
           "pack_name": "pack_018.json",
-          "count": 15
+          "count": 35
         }
       ],
       "choice_packs": [
@@ -857,7 +857,7 @@
         },
         {
           "pack_name": "pack_018.json",
-          "count": 15
+          "count": 35
         }
       ],
       "essay_packs": [
@@ -874,7 +874,7 @@
     "difficult_univ/essay": {
       "level": "難関大学レベル",
       "genre": "評論",
-      "total_count": 1740,
+      "total_count": 1760,
       "packs": [
         {
           "pack_name": "pack_001.json",
@@ -938,7 +938,7 @@
         },
         {
           "pack_name": "pack_016.json",
-          "count": 79
+          "count": 99
         }
       ],
       "choice_packs": [
@@ -1004,7 +1004,7 @@
         },
         {
           "pack_name": "pack_016.json",
-          "count": 79
+          "count": 99
         }
       ],
       "essay_packs": [
